@@ -1,0 +1,12 @@
+.page {
+    padding: 20px;
+}
+
+.loader {
+    font-size: 20px;
+}
+
+.error {
+    color: red;
+    font-size: 18px;
+}

@@ -1,0 +1,64 @@
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# --- Vite ---
+dist/
+dist-ssr/
+vite.config.time.ts
+vite.config.ts.timestamp*
+.cache/
+*.local
+
+# --- Environment variables ---
+.env
+.env.*
+!.env.example
+
+# --- Logs ---
+logs
+*.log
+*.log.*
+*.out
+*.err
+
+# --- Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- System files ---
+.DS_Store
+Thumbs.db
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- Coverage ---
+coverage/
+*.lcov
+
+# --- Optional: Testing ---
+/test-output/
+/jest-cache/
+/jest-results.json
+
+# --- Optional: Local server / temp ---
+tmp/
+temp/
+*.tmp
+
+# --- Optional: OS-specific ---
+ehthumbs.db
+desktop.ini
+
+# --- Optional: If you generate exports ---
+public/build/
+public/assets/
