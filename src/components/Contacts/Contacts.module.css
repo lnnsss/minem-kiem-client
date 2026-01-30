@@ -1,0 +1,131 @@
+.contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.contacts_cover {
+    position: relative;
+    width: 100%;
+    height: 860px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("./assets/images/bg2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-color: #000;
+    overflow: hidden;
+}
+.contacts_cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+.contacts_cover > * {
+    position: relative;
+    z-index: 2;
+}
+.contacts_cover h2 {
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--white);
+}
+.contacts_content {
+    width: 100%;
+    position: relative;
+}
+.leftRnmnt, .rightRnmnt {
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+.leftRnmnt {
+    left: 0;
+}
+.rightRnmnt {
+    right: 0;
+}
+.contacts__container {
+    width: 100%;
+    max-width: 700px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.contacts__container h3 {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+.contacts_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+.contacts_input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 20px;
+    border: 1px solid var(--grey);
+    font-size: 20px;
+}
+.contacts_btn {
+    width: 100%;
+    padding: 20px;
+    background-color: var(--secondBlack);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+/*----media-------------------------------------------*/
+
+/*----tablet----*/
+@media (max-width: 1124px) {
+    .contacts_cover {
+        height: 634px;
+    }
+    .contacts_cover h2 {
+        font-size: 28px;
+    }
+    .leftRnmnt, .rightRnmnt {
+        display: none;
+    }
+    .contacts__container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .contacts_cover h2 {
+        font-size: 28px;
+    }
+    .contacts__container {
+        padding: 30px 15px;
+        gap: 30px;
+    }
+    .contacts__container h3 {
+        font-size: 16px;
+    }
+    .contacts_form {
+        gap: 15px;
+    }
+    .contacts_input {
+        padding: 10px;
+        font-size: 14px;
+        font-weight: 300;
+    }
+    .contacts_btn {
+        padding: 10px;
+        font-size: 16px;
+    }
+}

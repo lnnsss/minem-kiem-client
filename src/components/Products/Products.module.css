@@ -1,0 +1,117 @@
+.products {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.rnmntLeft, .rnmntRight {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    max-width: 180px;
+}
+.rnmntLeft {
+    left: 0;
+}
+.rnmntRight {
+    right: 0;
+}
+.products_cover {
+    position: relative;
+    width: 100%;
+    height: 860px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("./assets/images/bg2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-color: #000;
+    overflow: hidden;
+}
+.products_cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+.products_cover > * {
+    position: relative;
+    z-index: 2;
+}
+.products_cover h2 {
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--white);
+}
+.products_container {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.products_header {
+    max-width: 846px;
+    width: 100%;
+    display: flex;
+    margin: 0 auto;
+}
+.products_filters {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+.products_filter button {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+}
+.products_filter_active button {
+    color: #000000;
+}
+.products_grid {
+    width: 100%;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+.products_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 320px;
+    cursor: pointer;
+}
+.products_item_image {
+    height: 360px;
+    width: 320px;
+}
+.products_item_text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+}
+.products_item_title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+}
+.products_item_price {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--grey);
+}
+.products_item_inStock {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--red);
+}

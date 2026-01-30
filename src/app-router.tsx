@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage/MainPage";
-import ProductPage from "./pages/ProductPage/ProductPage";
-import ProductsPage from "./pages/ProductsPage/ProductsPage";
-import ContactsPage from "./pages/ContactsPage/ContactsPage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import MainPage from "./pages/MainPage.tsx";
+import ProductPage from "./pages/ProductPage.tsx";
+import ProductsPage from "./pages/ProductsPage.tsx";
+import ContactsPage from "./pages/ContactsPage.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
 
 export const AppRouter = () => {
     return (

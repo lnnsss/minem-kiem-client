@@ -10,11 +10,11 @@
     --secondFont: "Comforter", sans-serif;
     --white: #ffffff;
     --grey: #808080;
-    --black: #000000;
+    --black: rgba(0, 0, 0, 0.51);
     --secondBlack: #222222;
     --main: #19221A;
     --red: #F21515;
-    --dropShadow: 0px 4px 20px rgba(0, 0, 0, 0.25);;
+    --dropShadow: 0px 4px 4px rgba(0, 0, 0, 0.1);;
 }
 
 /*----main-------------------------------------------*/
@@ -62,11 +62,6 @@ body {
     display: flex;
     flex-direction: column;
 }
-main {
-    width: 100%;
-    height: 100%;
-    flex: 1 1 auto;
-}
 .__container {
     padding: 0 20px;
     margin: 0 auto;
@@ -97,7 +92,9 @@ button:active {
 }
 
 @media (max-width: 768px) {
-    /* Стили для мобильных устройств */
+    .__container {
+        padding: 0 15px;
+    }
 }
 
 @media (max-width: 480px) {
