@@ -22,7 +22,7 @@
 
 .header_white {
     background-color: var(--white);
-    color: var(--black);
+    color: #000000;
     box-shadow: var(--dropShadow);
 }
 .logo {

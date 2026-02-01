@@ -48,7 +48,7 @@ export default function Contacts() {
                     <img src={leftRnmnt} alt="left ornament" className={s.leftRnmnt} />
                     <img src={rightRnmnt} alt="right ornament" className={s.rightRnmnt} />
 
-                    <div className={`__container ${s.contacts__container}`}>
+                    <div className={`__container ${s.contacts_container}`}>
                         <h3>Задайте любой интересующий вас вопрос</h3>
 
                         <form className={s.contacts_form} onSubmit={handleSubmit}>
