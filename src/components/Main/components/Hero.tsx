@@ -3,11 +3,14 @@ import s from "../Main.module.css";
 import logo from '../assets/images/logo.png';
 import { Link } from "react-router-dom";
 import cartIcon from "../assets/images/cart.png";
+import {useStores} from "../../../stores/use-stores.ts";
 
 export default function Hero() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [cartCounter] = useState(0);
+
+    const { modal } = useStores();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,7 +44,7 @@ export default function Hero() {
                             <li className={s.header_li}><Link to="/contacts" className={s.header_link}>Контакты</Link></li>
                         </ul>
 
-                        <button className={s.cart}>
+                        <button className={s.cart} onClick={() => modal.setEditingModalActive(true)}>
                             <span className={s.cartCounter}>{cartCounter || ''}</span>
                             <img src={cartIcon} alt="Корзина" />
                         </button>

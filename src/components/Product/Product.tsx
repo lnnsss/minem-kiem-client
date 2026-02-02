@@ -33,7 +33,6 @@ const Product = observer(() => {
     const handleCoverClick = (url: string) => {
         const index = media.findIndex((m) => m.url === url);
         setActiveIndex(index);
-        setIsModalOpen(true);
     };
 
     const handleImageClick = (index: number) => {

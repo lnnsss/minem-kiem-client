@@ -1,5 +1,7 @@
 import s from "./Header.module.css";
 import { useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../../stores/use-stores.ts"
 import { Link } from "react-router-dom";
 import Logo from "./components/Logo";
 import CartIcon from "./components/CartIcon";
@@ -8,13 +10,15 @@ type HeaderProps = {
     theme?: "green" | "white";
 };
 
-export default function Header({ theme = "green" }: HeaderProps) {
+const Header = observer(({ theme = "green" }: HeaderProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [cartCounter] = useState(0);
     const [logoWidth, setLogoWidth] = useState(230);
 
     const isWhite = theme === "white";
     const iconColor = isWhite ? "black" : "white";
+
+    const { modal } = useStores();
 
     useEffect(() => {
         const media = window.matchMedia("(max-width: 1124px)");
@@ -53,7 +57,11 @@ export default function Header({ theme = "green" }: HeaderProps) {
                     </nav>
 
                     <div className={s.cartWithBurger}>
-                        <button className={s.cart}>
+                        <button
+                            className={s.cart}
+                            onClick={() => modal.setEditingModalActive(true)}
+                            aria-label="Корзина"
+                        >
                             <span className={s.cartCounter}>{cartCounter || ""}</span>
                             <CartIcon color={iconColor} />
                         </button>
@@ -85,4 +93,6 @@ export default function Header({ theme = "green" }: HeaderProps) {
             </div>
         </header>
     );
-}
+})
+
+export default Header
