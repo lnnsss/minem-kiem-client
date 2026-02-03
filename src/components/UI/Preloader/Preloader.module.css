@@ -1,0 +1,44 @@
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1; /* Явно для transition */
+    transition: opacity 0.8s ease-out;
+}
+
+.preloader.fadeOut {
+    opacity: 0; /* Конечное состояние для fade */
+}
+
+.logo {
+    width: 560px;
+    height: auto;
+    animation: gentlePulse 1.5s infinite; /* Без opacity */
+}
+
+@keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); } /* Только scale, без opacity */
+}
+
+/*----media-------------------------------------------*/
+
+
+@media (max-width: 768px) {
+    .logo {
+        width: 410px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        width: 260px;
+    }
+}

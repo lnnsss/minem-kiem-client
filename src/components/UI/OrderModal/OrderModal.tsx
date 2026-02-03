@@ -12,6 +12,7 @@ export const OrderModal = observer(() => {
     const { modal, cart } = useStores();
 
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [comment, setComment] = useState("");
 
@@ -135,11 +136,16 @@ export const OrderModal = observer(() => {
                     )}
                 </div>
 
-                {/* ДАННЫЕ */}
                 <ModalInput
                     label="ФИО"
                     value={name}
                     onChange={setName}
+                />
+
+                <ModalInput
+                    label="Еmail"
+                    value={email}
+                    onChange={setEmail}
                 />
 
                 <ModalInput
