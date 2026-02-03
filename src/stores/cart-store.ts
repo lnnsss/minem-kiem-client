@@ -1,95 +1,150 @@
-import { makeAutoObservable } from "mobx";
-import type { RootStore } from "./root-store";
+import { makeAutoObservable, reaction } from "mobx";
+import type { Product, ProductVariant } from "./product-store.ts";
 
 export interface CartItem {
-    id: string | number;
-    title: string;
+    productId: number;
+    variantId: number;
+    name: string;
+    size: string;
+    color: string;
     price: number;
-    image?: string;
     quantity: number;
+    image?: string;
 }
 
+const STORAGE_KEY = "cart";
+
 export class CartStore {
-    root: RootStore;
     items: CartItem[] = [];
 
-    constructor(root: RootStore) {
+    constructor() {
         makeAutoObservable(this);
-        this.root = root;
 
-        this.loadFromLocalStorage();
-    }
+        this.loadFromStorage();
 
-    // ======= LOCAL STORAGE ======= //
-
-    saveToLocalStorage() {
-        localStorage.setItem("cart", JSON.stringify(this.items));
-    }
-
-    loadFromLocalStorage() {
-        const data = localStorage.getItem("cart");
-        if (data) {
-            this.items = JSON.parse(data);
+        // ФЕЙКОВЫЕ ТОВАРЫ (если корзина пустая)
+        if (this.items.length === 0) {
+            this.items = [
+                {
+                    productId: 1,
+                    variantId: 101,
+                    name: "Худи Нижнекамск",
+                    size: "S",
+                    color: "Черный",
+                    price: 5000,
+                    quantity: 2,
+                    image: "/images/cover.jpg",
+                },
+                {
+                    productId: 1,
+                    variantId: 102,
+                    name: "Худи Нижнекамск",
+                    size: "M",
+                    color: "Черный",
+                    price: 5000,
+                    quantity: 1,
+                    image: "/images/cover.jpg",
+                },
+            ];
+            this.saveToStorage();
         }
+
+        reaction(
+            () => this.items.map((i) => ({ ...i })),
+            () => this.saveToStorage()
+        );
     }
 
-    // ======= CRUD ОПЕРАЦИИ ======= //
+    /* ===== ACTIONS ===== */
 
-    addItem(product: { id: string | number; title: string; price: number; image?: string }) {
-        const existing = this.items.find((item) => item.id === product.id);
+    addToCart(product: Product, variant: ProductVariant, quantity = 1) {
+        const existing = this.items.find(
+            (i) =>
+                i.productId === product.id &&
+                i.variantId === variant.id
+        );
 
         if (existing) {
-            existing.quantity++;
-        } else {
-            this.items.push({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                image: product.image,
-                quantity: 1
-            });
+            existing.quantity += quantity;
+            return;
         }
 
-        this.saveToLocalStorage();
+        this.items.push({
+            productId: product.id,
+            variantId: variant.id,
+            name: product.name,
+            size: variant.size,
+            color: product.color.name,
+            price: variant.price,
+            quantity,
+            image: product.media[0]?.url,
+        });
     }
 
-    removeItem(id: string | number) {
-        this.items = this.items.filter((item) => item.id !== id);
-        this.saveToLocalStorage();
+    increaseQuantity(variantId: number) {
+        const item = this.items.find(
+            (i) => i.variantId === variantId
+        );
+        if (item) item.quantity += 1;
     }
 
-    increase(id: string | number) {
-        const item = this.items.find((i) => i.id === id);
-        if (item) {
-            item.quantity++;
-            this.saveToLocalStorage();
-        }
-    }
-
-    decrease(id: string | number) {
-        const item = this.items.find((i) => i.id === id);
+    decreaseQuantity(variantId: number) {
+        const item = this.items.find(
+            (i) => i.variantId === variantId
+        );
         if (!item) return;
 
         if (item.quantity === 1) {
-            this.removeItem(id);
+            this.removeFromCart(variantId);
         } else {
-            item.quantity--;
-            this.saveToLocalStorage();
+            item.quantity -= 1;
         }
     }
 
-    clear() {
+    removeFromCart(variantId: number) {
+        this.items = this.items.filter(
+            (i) => i.variantId !== variantId
+        );
+    }
+
+    clearCart() {
         this.items = [];
-        this.saveToLocalStorage();
     }
 
-    // ======= ВЫЧИСЛЕНИЯ ======= //
+    /* ===== COMPUTED ===== */
 
-    get totalItems() {
-        return this.items.reduce((acc, item) => acc + item.quantity, 0);
+    get totalItemsCount() {
+        return this.items.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+        );
     }
 
-    get totalPrice() {
-        return this.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+    get productsTotalPrice() {
+        return this.items.reduce(
+            (sum, item) =>
+                sum + item.price * item.quantity,
+            0
+        );
+    }
+
+    /* ===== STORAGE ===== */
+
+    saveToStorage() {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(this.items)
+        );
+    }
+
+    loadFromStorage() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return;
+
+        try {
+            this.items = JSON.parse(data);
+        } catch {
+            this.items = [];
+        }
     }
 }

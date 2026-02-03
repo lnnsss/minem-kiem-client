@@ -13,7 +13,7 @@ import ArrowRight from "./components/ArrowRight.tsx";
 import ProductImageModal from "./components/ProductImageModal.tsx";
 
 const Product = observer(() => {
-    const { product: productStore } = useStores();
+    const { product: productStore, cart } = useStores();
     const product = productStore.product;
     const media = product?.media || [];
 
@@ -40,6 +40,17 @@ const Product = observer(() => {
         setIsModalOpen(true);
     };
 
+    // ✅ Добавление в корзину
+    const handleAddToCart = () => {
+        if (!productStore.currentVariant) return;
+
+        cart.addToCart(
+            product,
+            productStore.currentVariant,
+            1
+        );
+    };
+
     return (
         <>
             <Header />
@@ -57,7 +68,6 @@ const Product = observer(() => {
 
                     {/* Изображения продукта */}
                     <div className={s.product_images}>
-                        {/* Слайдер только на мобильных ≤768px */}
                         <div className={s.slider_container}>
                             <button className={s.slider_arrow} onClick={handlePrev}>
                                 <ArrowLeft />
@@ -73,7 +83,6 @@ const Product = observer(() => {
                             </button>
                         </div>
 
-                        {/* Мини-картинки для ПК/планшета >768px */}
                         <div className={s.product_covers}>
                             {media.map((m, idx) => (
                                 <img
@@ -112,9 +121,11 @@ const Product = observer(() => {
                                 ))}
                             </div>
 
+                            {/* ✅ Кнопка добавления в корзину */}
                             <button
                                 className={s.product_info_buyBtn}
                                 disabled={!productStore.isInStock}
+                                onClick={handleAddToCart}
                             >
                                 В корзину
                             </button>
@@ -127,7 +138,6 @@ const Product = observer(() => {
                 </div>
             </div>
 
-            {/* Модалка для просмотра изображения */}
             {isModalOpen && (
                 <ProductImageModal
                     images={media.map((m) => m.url)}

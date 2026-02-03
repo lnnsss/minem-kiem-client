@@ -2,7 +2,6 @@ import s from "./OrderModal.module.css";
 import { useStores } from "../../../stores/use-stores";
 import { observer } from "mobx-react-lite";
 import CloseIcon from "./components/CloseIcon";
-import cover from "./assets/images/cover.jpg";
 import ModalProduct from "./components/ModalProduct";
 import { ModalInput } from "./components/ModalInput";
 import { useState, useEffect } from "react";
@@ -10,7 +9,7 @@ import { YandexDeliveryWidget } from "./components/YandexDeliveryWidget";
 import type { DeliveryPoint } from "./components/YandexDeliveryWidget";
 
 export const OrderModal = observer(() => {
-    const { modal } = useStores();
+    const { modal, cart } = useStores();
 
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
@@ -19,14 +18,15 @@ export const OrderModal = observer(() => {
     const [deliveryAddress, setDeliveryAddress] =
         useState<string | null>(null);
     const [deliveryPrice, setDeliveryPrice] =
-        useState<number>(0);
+        useState(0);
     const [deliverySelected, setDeliverySelected] =
         useState(false);
 
-    const PRODUCTS_SUM = 15000;
-    const TOTAL_SUM = PRODUCTS_SUM + deliveryPrice;
+    const PRODUCTS_SUM = cart.productsTotalPrice;
+    const TOTAL_SUM =
+        PRODUCTS_SUM +
+        (deliverySelected ? deliveryPrice : 0);
 
-    // блокируем скролл body при открытой модалке
     useEffect(() => {
         if (modal.editingModalActive) {
             document.body.style.overflow = "hidden";
@@ -47,7 +47,9 @@ export const OrderModal = observer(() => {
     return (
         <div
             className={s.overlay}
-            onClick={() => modal.setEditingModalActive(false)}
+            onClick={() =>
+                modal.setEditingModalActive(false)
+            }
         >
             <div
                 className={s.modal}
@@ -64,49 +66,66 @@ export const OrderModal = observer(() => {
                     </button>
                 </div>
 
+                {/* ТОВАРЫ */}
                 <div className={s.modal_products}>
-                    <ModalProduct
-                        slug="sweatshirt-black-2"
-                        image={cover}
-                        title="Худи Нижнекамск"
-                        size="S"
-                        count={2}
-                        price={5000}
-                    />
-                    <ModalProduct
-                        slug="sweatshirt-black-2"
-                        image={cover}
-                        title="Худи Нижнекамск"
-                        size="M"
-                        count={1}
-                        price={5000}
-                    />
+                    {cart.items.length === 0 && (
+                        <p>Корзина пуста</p>
+                    )}
+
+                    {cart.items.map((item) => (
+                        <ModalProduct
+                            key={item.variantId}
+                            slug={String(item.variantId)}
+                            image={item.image!}
+                            title={item.name}
+                            size={item.size}
+                            count={item.quantity}
+                            price={item.price}
+                            variantId={item.variantId}
+                        />
+                    ))}
+
                 </div>
 
                 <h3 className={s.modal_Price}>
                     Сумма: {PRODUCTS_SUM} руб
                 </h3>
 
+                {/* ДОСТАВКА */}
                 <div className={s.modal_delivery}>
                     <h3>Доставка</h3>
 
                     {!deliverySelected && (
                         <YandexDeliveryWidget
-                            onSelect={handleDeliverySelect}
+                            onSelect={
+                                handleDeliverySelect
+                            }
                         />
                     )}
 
                     {deliverySelected && (
-                        <div className={s.selectedDelivery}>
-                            <strong>Пункт выдачи:</strong>
+                        <div
+                            className={s.selectedDelivery}
+                        >
+                            <strong>
+                                Пункт выдачи:
+                            </strong>
                             <div>{deliveryAddress}</div>
                             <div>
-                                Стоимость: {deliveryPrice} руб
+                                Стоимость:{" "}
+                                {deliveryPrice} руб
                             </div>
                             <button
+                                className={
+                                    s.editDelivery
+                                }
                                 onClick={() => {
-                                    setDeliverySelected(false);
-                                    setDeliveryAddress(null);
+                                    setDeliverySelected(
+                                        false
+                                    );
+                                    setDeliveryAddress(
+                                        null
+                                    );
                                     setDeliveryPrice(0);
                                 }}
                             >
@@ -116,6 +135,7 @@ export const OrderModal = observer(() => {
                     )}
                 </div>
 
+                {/* ДАННЫЕ */}
                 <ModalInput
                     label="ФИО"
                     value={name}
@@ -137,11 +157,12 @@ export const OrderModal = observer(() => {
                     onChange={setComment}
                 />
 
+                {/* ИТОГО */}
                 <p className={s.modal_orderInfo}>
                     Сумма: {PRODUCTS_SUM} руб
                     <br />
                     Доставка:{" "}
-                    {deliveryPrice
+                    {deliverySelected
                         ? `${deliveryPrice} руб`
                         : "не выбрана"}
                     <br />
@@ -155,7 +176,10 @@ export const OrderModal = observer(() => {
 
                 <button
                     className={s.buyBtn}
-                    disabled={!deliverySelected}
+                    disabled={
+                        !deliverySelected ||
+                        cart.items.length === 0
+                    }
                 >
                     К оплате
                 </button>

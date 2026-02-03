@@ -33,6 +33,8 @@ export const YandexDeliveryWidget: React.FC<Props> = ({ onSelect }) => {
                         height: "450px",
                         width: "100%",
                     },
+                    delivery_price: "от 100 руб",
+                    delivery_term: "от 1 дня",
 
                     physical_dims_weight_gross: 10000,
                     physical_dims: {

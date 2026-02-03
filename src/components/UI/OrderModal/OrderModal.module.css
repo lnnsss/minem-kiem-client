@@ -123,6 +123,12 @@
     font-size: 20px;
     font-weight: 600;
 }
+.editDelivery {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: underline;
+}
 .modal_input {
     width: 100%;
     display: flex;

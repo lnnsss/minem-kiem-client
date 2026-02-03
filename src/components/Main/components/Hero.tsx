@@ -4,13 +4,13 @@ import logo from '../assets/images/logo.png';
 import { Link } from "react-router-dom";
 import cartIcon from "../assets/images/cart.png";
 import {useStores} from "../../../stores/use-stores.ts";
+import {observer} from "mobx-react-lite";
 
-export default function Hero() {
+const Hero = observer(() => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [cartCounter] = useState(0);
 
-    const { modal } = useStores();
+    const { modal, cart } = useStores();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -27,6 +27,7 @@ export default function Hero() {
     }, []);
 
     const closeMenu = () => setIsMenuOpen(false);
+    const cartCounter = cart.totalItemsCount;
 
     return (
         <section className={s.hero}>
@@ -87,4 +88,6 @@ export default function Hero() {
             </div>
         </section>
     );
-}
+})
+
+export default Hero
