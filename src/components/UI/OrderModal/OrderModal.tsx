@@ -1,10 +1,10 @@
 import s from "./OrderModal.module.css";
-import { useStores } from "../../../stores/use-stores";
+import { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { useStores } from "../../../stores/use-stores";
 import CloseIcon from "./components/CloseIcon";
 import ModalProduct from "./components/ModalProduct";
 import { ModalInput } from "./components/ModalInput";
-import { useState, useEffect } from "react";
 import { YandexDeliveryWidget } from "./components/YandexDeliveryWidget";
 import type { DeliveryPoint } from "./components/YandexDeliveryWidget";
 
@@ -18,10 +18,9 @@ export const OrderModal = observer(() => {
 
     const [deliveryAddress, setDeliveryAddress] =
         useState<string | null>(null);
-    const [deliveryPrice, setDeliveryPrice] =
-        useState(0);
-    const [deliverySelected, setDeliverySelected] =
-        useState(false);
+    const [deliveryPrice, setDeliveryPrice] = useState(0);
+    const [deliverySelected, setDeliverySelected] = useState(false);
+    const [isAgreed, setIsAgreed] = useState(false);
 
     const PRODUCTS_SUM = cart.productsTotalPrice;
     const TOTAL_SUM =
@@ -180,13 +179,21 @@ export const OrderModal = observer(() => {
                     Итоговая сумма: {TOTAL_SUM} руб
                 </div>
 
-                <button
-                    className={s.buyBtn}
-                    disabled={
-                        !deliverySelected ||
-                        cart.items.length === 0
-                    }
-                >
+                <div className={s.agreement}>
+                    <label className={s.checkboxLabel}>
+                        <input type="checkbox" checked={isAgreed}
+                            onChange={(e) => setIsAgreed(e.target.checked)} />
+                        <span>
+                            Я согласен с{" "}
+                            <a href="/oferta" target="_blank" className={s.docLink}>Договор-оферта</a>,{" "}
+                            <a href="/agreement" target="_blank" className={s.docLink}>Согласие на обработку персональных данных</a>,{" "}
+                            <a href="/politics" target="_blank" className={s.docLink}>Политика конфиденциальности</a>
+                        </span>
+                    </label>
+                </div>
+
+                <button className={s.buyBtn}
+                    disabled={ !deliverySelected || cart.items.length === 0 || !isAgreed}>
                     К оплате
                 </button>
             </div>

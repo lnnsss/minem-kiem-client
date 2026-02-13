@@ -27,7 +27,7 @@
 }
 .footer_right {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 60px;
 }
 .footer_ul {

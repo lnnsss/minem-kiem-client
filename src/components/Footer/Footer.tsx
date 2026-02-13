@@ -1,5 +1,6 @@
 import logo from './assets/images/logo.png';
 import s from "./Footer.module.css";
+import {Link} from "react-router-dom";
 
 export default function Footer() {
     return (
@@ -16,22 +17,22 @@ export default function Footer() {
                             className={`${s.footer_logo} ${s.footer_logo_desktop}`}
                         />
                     </a>
-                    <span>© 2025 Минем Кием. Все права защищены.</span>
+                    <span>© 2026 Минем Кием.</span>
                 </div>
 
                 <div className={s.footer_right}>
-                    <ul className={s.footer_ul}>
-                        <h5>Информация</h5>
-                        <li className={s.footer_li}>
-                            <a href="#advantages" className={s.footer_link}>Преимущества</a>
-                        </li>
-                        <li className={s.footer_li}>
-                            <a href="#team" className={s.footer_link}>Команда</a>
-                        </li>
-                        <li className={s.footer_li}>
-                            <a href="#reviews" className={s.footer_link}>Отзывы</a>
-                        </li>
-                    </ul>
+                    {/*<ul className={s.footer_ul}>*/}
+                    {/*    <h5>Информация</h5>*/}
+                    {/*    <li className={s.footer_li}>*/}
+                    {/*        <a href="#advantages" className={s.footer_link}>Преимущества</a>*/}
+                    {/*    </li>*/}
+                    {/*    <li className={s.footer_li}>*/}
+                    {/*        <a href="#team" className={s.footer_link}>Команда</a>*/}
+                    {/*    </li>*/}
+                    {/*    <li className={s.footer_li}>*/}
+                    {/*        <a href="#reviews" className={s.footer_link}>Отзывы</a>*/}
+                    {/*    </li>*/}
+                    {/*</ul>*/}
 
                     <ul className={s.footer_ul}>
                         <h5>Соц. сети</h5>
@@ -56,6 +57,19 @@ export default function Footer() {
                         </li>
                         <li className={s.footer_li}>
                             Казань, ул. Московская 70
+                        </li>
+                    </ul>
+
+                    <ul className={s.footer_ul}>
+                        <h5>Документы</h5>
+                        <li className={s.footer_li}>
+                            <Link to={"/agreement"} className={s.footer_link}>Пользовательское Соглашение</Link>
+                        </li>
+                        <li className={s.footer_li}>
+                            <Link to={"/politics"} className={s.footer_link}>Политика обработки персональных данных</Link>
+                        </li>
+                        <li className={s.footer_li}>
+                            <Link to={"/oferta"} className={s.footer_link}>Публичная оферта</Link>
                         </li>
                     </ul>
                 </div>

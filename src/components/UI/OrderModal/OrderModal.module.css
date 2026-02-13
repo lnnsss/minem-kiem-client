@@ -166,6 +166,13 @@
     font-weight: 600;
     color: var(--black);
 }
+.checkboxLabel span {
+    margin-left: 5px;
+    line-height: 140%;
+}
+.docLink {
+    text-decoration: underline;
+}
 .buyBtn {
     font-size: 20px;
     font-weight: 600;
@@ -173,6 +180,15 @@
     width: 100%;
     padding: 20px;
     background-color: var(--secondBlack);
+}
+.buyBtn:disabled {
+    background-color: var(--grey);
+    color: var(--white);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.buyBtn:disabled:hover {
+    background-color: var(--grey);
 }
 
 /*----media-------------------------------------------*/
@@ -310,6 +326,9 @@
     }
     .modal_totalPrice {
         font-size: 16px;
+    }
+    .checkboxLabel {
+        font-size: 14px;
     }
     .buyBtn {
         font-size: 14px;
