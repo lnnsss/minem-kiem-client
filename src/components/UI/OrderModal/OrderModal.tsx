@@ -5,8 +5,6 @@ import { useStores } from "../../../stores/use-stores";
 import CloseIcon from "./components/CloseIcon";
 import ModalProduct from "./components/ModalProduct";
 import { ModalInput } from "./components/ModalInput";
-import { YandexDeliveryWidget } from "./components/YandexDeliveryWidget";
-import type { DeliveryPoint } from "./components/YandexDeliveryWidget";
 
 export const OrderModal = observer(() => {
     const { modal, cart } = useStores();
@@ -14,18 +12,14 @@ export const OrderModal = observer(() => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [deliveryAdress, setDeliveryAdress] = useState("");
+    const [delivery] = useState(400);
     const [comment, setComment] = useState("");
 
-    const [deliveryAddress, setDeliveryAddress] =
-        useState<string | null>(null);
-    const [deliveryPrice, setDeliveryPrice] = useState(0);
-    const [deliverySelected, setDeliverySelected] = useState(false);
     const [isAgreed, setIsAgreed] = useState(false);
 
     const PRODUCTS_SUM = cart.productsTotalPrice;
-    const TOTAL_SUM =
-        PRODUCTS_SUM +
-        (deliverySelected ? deliveryPrice : 0);
+    const TOTAL_SUM = PRODUCTS_SUM + (deliveryAdress.length !== 0 ? delivery : 0);
 
     useEffect(() => {
         if (modal.editingModalActive) {
@@ -37,12 +31,6 @@ export const OrderModal = observer(() => {
     }, [modal.editingModalActive]);
 
     if (!modal.editingModalActive) return null;
-
-    const handleDeliverySelect = (point: DeliveryPoint) => {
-        setDeliveryAddress(point.address);
-        setDeliveryPrice(point.price);
-        setDeliverySelected(true);
-    };
 
     return (
         <div
@@ -91,50 +79,6 @@ export const OrderModal = observer(() => {
                     Сумма: {PRODUCTS_SUM} руб
                 </h3>
 
-                {/* ДОСТАВКА */}
-                <div className={s.modal_delivery}>
-                    <h3>Доставка</h3>
-
-                    {!deliverySelected && (
-                        <YandexDeliveryWidget
-                            onSelect={
-                                handleDeliverySelect
-                            }
-                        />
-                    )}
-
-                    {deliverySelected && (
-                        <div
-                            className={s.selectedDelivery}
-                        >
-                            <strong>
-                                Пункт выдачи:
-                            </strong>
-                            <div>{deliveryAddress}</div>
-                            <div>
-                                Стоимость:{" "}
-                                {deliveryPrice} руб
-                            </div>
-                            <button
-                                className={
-                                    s.editDelivery
-                                }
-                                onClick={() => {
-                                    setDeliverySelected(
-                                        false
-                                    );
-                                    setDeliveryAddress(
-                                        null
-                                    );
-                                    setDeliveryPrice(0);
-                                }}
-                            >
-                                Изменить
-                            </button>
-                        </div>
-                    )}
-                </div>
-
                 <ModalInput
                     label="ФИО"
                     value={name}
@@ -156,6 +100,13 @@ export const OrderModal = observer(() => {
                 />
 
                 <ModalInput
+                    label="Адрес доставки (ближайший адрес пункта выдачи к вашему дому)"
+                    value={deliveryAdress}
+                    onChange={setDeliveryAdress}
+                    placeholder="Казань, Кремлёвская, 8"
+                />
+
+                <ModalInput
                     label="Комментарий"
                     textarea
                     value={comment}
@@ -167,11 +118,11 @@ export const OrderModal = observer(() => {
                     Сумма: {PRODUCTS_SUM} руб
                     <br />
                     Доставка:{" "}
-                    {deliverySelected
-                        ? `${deliveryPrice} руб`
+                    {deliveryAdress.length != 0
+                        ? `${delivery} руб`
                         : "не выбрана"}
                     <br />
-                    {deliveryAddress ??
+                    {deliveryAdress ??
                         "Пункт выдачи не выбран"}
                 </p>
 
@@ -193,7 +144,7 @@ export const OrderModal = observer(() => {
                 </div>
 
                 <button className={s.buyBtn}
-                    disabled={ !deliverySelected || cart.items.length === 0 || !isAgreed}>
+                    disabled={ cart.items.length === 0 || !isAgreed}>
                     К оплате
                 </button>
             </div>
