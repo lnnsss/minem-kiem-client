@@ -2,6 +2,15 @@ import { api } from "./axios-client";
 import { ENDPOINTS } from "./endpoints";
 
 export const Api = {
-    getProducts: () => api.get(ENDPOINTS.PRODUCTS),
-    getProduct: (id: string | number) => api.get(ENDPOINTS.PRODUCT(id))
+    getProducts: () =>
+        api.get(ENDPOINTS.PRODUCTS),
+
+    getProduct: (slug: string | number) =>
+        api.get(ENDPOINTS.PRODUCT(slug)),
+
+    getProductsByCategory: (slug: string) =>
+        api.get(ENDPOINTS.PRODUCTS_BY_CATEGORY(slug)),
+
+    getProductCategories: () =>
+        api.get(ENDPOINTS.PRODUCT_CATEGORIES),
 };

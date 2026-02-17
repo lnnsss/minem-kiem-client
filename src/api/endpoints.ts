@@ -1,4 +1,8 @@
 export const ENDPOINTS = {
     PRODUCTS: "/products",
-    PRODUCT: (id: string | number) => `/products/${id}`
+    PRODUCT: (slug: string | number) => `/products/${slug}`,
+
+    PRODUCT_CATEGORIES: "/products/categories",
+    PRODUCTS_BY_CATEGORY: (slug: string) =>
+        `/products/categories/${slug}`,
 };

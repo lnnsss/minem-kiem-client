@@ -186,6 +186,12 @@
 .products_item_link {
     display: block;
 }
+.pusto {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--grey);
+}
 
 /* ---------- MEDIA ---------- */
 

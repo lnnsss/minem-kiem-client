@@ -168,6 +168,11 @@
     background-color: var(--secondBlack);
     color: var(--white);
 }
+.size_btn_disabled {
+    border: 1px solid var(--grey);
+    color: var(--grey);
+    text-decoration: line-through;
+}
 
 .product_info_buyBtn {
     display: inline-flex;

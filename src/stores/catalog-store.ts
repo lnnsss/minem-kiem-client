@@ -1,5 +1,6 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import type { RootStore } from "./root-store";
+import { Api } from "../api/api-helpers";
 
 /* ======= TYPES ======= */
 
@@ -34,63 +35,121 @@ export interface Product {
     categories: ProductCategory[];
 }
 
+/* ======= API RESPONSES ======= */
+
+interface ProductsResponse {
+    results: {
+        id: number;
+        name: string;
+        slug: string;
+        price: string;
+        main_image: string;
+        in_stock: boolean;
+        group: ProductCategory;
+    }[];
+}
+
+interface CategoriesResponse {
+    results: ProductCategory[];
+}
+
 /* ======= STORE ======= */
 
 export class CatalogStore {
     root: RootStore;
+
     items: Product[] = [];
+    categories: ProductCategory[] = [];
+    isLoading = false;
 
     constructor(root: RootStore) {
         makeAutoObservable(this);
         this.root = root;
-
-        this.seedFakeProducts();
     }
 
-    /* ======= FAKE DATA ======= */
+    /* ======= MAPPER ======= */
 
-    seedFakeProducts() {
-        const products: Product[] = Array.from({ length: 10 }).map((_, i) => {
-            const inStock = i % 3 !== 0;
+    private mapProduct(
+        item: ProductsResponse["results"][number]
+    ): Product {
+        return {
+            id: item.id,
+            name: item.name,
+            slug: item.slug,
+            price: item.price,
+            media: [
+                {
+                    url: item.main_image,
+                    type: "image",
+                    position: 0
+                }
+            ],
+            variants: [
+                {
+                    id: item.id,
+                    size: "default",
+                    sku: item.slug,
+                    price: Number(item.price),
+                    stock: item.in_stock ? 1 : 0,
+                    is_active: true
+                }
+            ],
+            categories: [item.group]
+        };
+    }
 
-            return {
-                id: i + 1,
-                name: "Свитшот",
-                slug: `sweatshirt-black-${i + 1}`,
-                price: "4000.00",
-                media: [
-                    {
-                        url: "/images/cover.jpg",
-                        type: "image",
-                        position: 0
-                    },
-                    {
-                        url: "/images/cover2.jpg",
-                        type: "image",
-                        position: 1
-                    }
-                ],
-                variants: [
-                    {
-                        id: i + 1,
-                        size: "M",
-                        sku: `sweatshirt-black-${i + 1}-m`,
-                        price: 4000,
-                        stock: inStock ? 5 : 0,
-                        is_active: true
-                    }
-                ],
-                categories: [
-                    {
-                        id: 1,
-                        name: "Свитшоты",
-                        slug: "sweatshirts"
-                    }
-                ]
-            };
-        });
+    /* ======= API ======= */
 
-        this.items = products;
+    async fetchCategories() {
+        try {
+            const { data } = await Api.getProductCategories();
+
+            runInAction(() => {
+                this.categories = (data as CategoriesResponse).results;
+            });
+        } catch (e) {
+            console.error("fetchCategories error", e);
+        }
+    }
+
+    async fetchProducts() {
+        this.isLoading = true;
+
+        try {
+            const { data } = await Api.getProducts();
+
+            runInAction(() => {
+                this.items = (data as ProductsResponse).results.map((item) =>
+                    this.mapProduct(item)
+                );
+            });
+        } catch (e) {
+            console.error("fetchProducts error", e);
+        } finally {
+            runInAction(() => {
+                this.isLoading = false;
+            });
+        }
+    }
+
+    async fetchProductsByCategory(slug: string) {
+        this.isLoading = true;
+
+        try {
+            const { data } = await Api.getProductsByCategory(slug);
+
+            runInAction(() => {
+                this.items = (data as ProductsResponse).results.map((item) =>
+                    this.mapProduct(item)
+                );
+            });
+        } catch (e) {
+            console.error("fetchProductsByCategory error", e);
+        } finally {
+            runInAction(() => {
+                this.isLoading = false;
+            });
+        }
     }
 
     /* ======= HELPERS ======= */
@@ -101,51 +160,7 @@ export class CatalogStore {
         );
     }
 
-    mainImage(product: Product) {
-        return product.media
-            .slice()
-            .sort((a, b) => a.position - b.position)[0]?.url;
-    }
-
-    /* ======= GETTERS ======= */
-
-    get inStockItems() {
-        return this.items.filter((item) => this.hasStock(item));
-    }
-
     getBySlug(slug: string) {
         return this.items.find((item) => item.slug === slug);
-    }
-
-    getByCategory(categorySlug: string) {
-        if (categorySlug === "all" || categorySlug === "Все") {
-            return this.items;
-        }
-
-        return this.items.filter((item) =>
-            item.categories.some((c) => c.slug === categorySlug)
-        );
-    }
-
-    get categories() {
-        const map = new Map<number, ProductCategory>();
-
-        this.items.forEach((item) => {
-            item.categories.forEach((cat) => {
-                map.set(cat.id, cat);
-            });
-        });
-
-        return Array.from(map.values());
-    }
-
-    /* ======= COMPUTED ======= */
-
-    get totalItems() {
-        return this.items.length;
-    }
-
-    get totalInStock() {
-        return this.inStockItems.length;
     }
 }

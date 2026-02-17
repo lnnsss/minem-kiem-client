@@ -16,6 +16,15 @@ export const OrderModal = observer(() => {
     const [delivery] = useState(400);
     const [comment, setComment] = useState("");
 
+    // проверка на то, что полня не пустые
+    const isFormFilled = [
+        name,
+        email,
+        phone,
+        deliveryAdress,
+        comment,
+    ].every(value => value.trim().length > 0);
+
     const [isAgreed, setIsAgreed] = useState(false);
 
     const PRODUCTS_SUM = cart.productsTotalPrice;
@@ -144,7 +153,7 @@ export const OrderModal = observer(() => {
                 </div>
 
                 <button className={s.buyBtn}
-                    disabled={ cart.items.length === 0 || !isAgreed}>
+                    disabled={ !isFormFilled || cart.items.length === 0 || !isAgreed}>
                     К оплате
                 </button>
             </div>

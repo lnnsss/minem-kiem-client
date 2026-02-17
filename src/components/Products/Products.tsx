@@ -1,22 +1,34 @@
 import s from "./Products.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { useStores } from "../../stores/use-stores.ts";
+import { useStores } from "../../stores/use-stores";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import ProductsItem from "./components/ProductsItem.tsx";
+import ProductsItem from "./components/ProductsItem";
+import ProductsFilter from "./components/ProductsFilter";
 import leftRnmnt from "./assets/images/rnmntLeft.png";
 import rightRnmnt from "./assets/images/rnmntRight.png";
-import ProductsFilter from "./components/ProductsFilter.tsx";
 
 const Products = observer(() => {
     const { catalog } = useStores();
     const [activeCategory, setActiveCategory] = useState("all");
 
-    const products =
-        activeCategory === "all"
-            ? catalog.items
-            : catalog.getByCategory(activeCategory);
+    useEffect(() => {
+        catalog.fetchCategories();
+        catalog.fetchProducts();
+    }, [catalog]);
+
+    const handleCategoryChange = (slug) => {
+        setActiveCategory(slug);
+
+        if (slug === "all") {
+            catalog.fetchProducts();
+        } else {
+            catalog.fetchProductsByCategory(slug);
+        }
+    };
+
+    const isEmpty = catalog.items.length === 0;
 
     return (
         <>
@@ -36,7 +48,7 @@ const Products = observer(() => {
                             <ProductsFilter
                                 title="Все"
                                 isActive={activeCategory === "all"}
-                                onClick={() => setActiveCategory("all")}
+                                onClick={() => handleCategoryChange("all")}
                             />
 
                             {catalog.categories.map((cat) => (
@@ -44,28 +56,37 @@ const Products = observer(() => {
                                     key={cat.id}
                                     title={cat.name}
                                     isActive={activeCategory === cat.slug}
-                                    onClick={() => setActiveCategory(cat.slug)}
+                                    onClick={() => handleCategoryChange(cat.slug)}
                                 />
                             ))}
                         </ul>
                     </div>
 
-                    <div className={s.products_grid}>
-                        {products.map((item) => {
-                            const sortedMedia = item.media.slice().sort((a, b) => a.position - b.position);
-                            return (
-                                <ProductsItem
-                                    key={item.id}
-                                    slug={item.slug}
-                                    title={item.name}
-                                    price={Number(item.price)}
-                                    image={sortedMedia[0]?.url}
-                                    hoverImage={sortedMedia[1]?.url}
-                                    inStock={catalog.hasStock(item)}
-                                />
-                            );
-                        })}
-                    </div>
+                    {isEmpty ? (
+                        <div className={s.products_empty}>
+                            <p className={s.pusto}>Каталог пуст</p>
+                        </div>
+                    ) : (
+                        <div className={s.products_grid}>
+                            {catalog.items.map((item) => {
+                                const media = item.media
+                                    .slice()
+                                    .sort((a, b) => a.position - b.position);
+
+                                return (
+                                    <ProductsItem
+                                        key={item.id}
+                                        slug={item.slug}
+                                        title={item.name}
+                                        price={Number(item.price)}
+                                        image={media[0]?.url}
+                                        hoverImage={media[1]?.url}
+                                        inStock={catalog.hasStock(item)}
+                                    />
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
 
