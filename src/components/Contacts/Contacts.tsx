@@ -6,6 +6,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import FormInput from "./components/FormInput.tsx";
+import { Api } from "../../api/api-helpers.ts";
 
 type FormState = {
     email: string;
@@ -24,16 +25,24 @@ export default function Contacts() {
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
-
-        setForm(prev => ({
-            ...prev,
-            [name]: value,
-        }));
+        setForm(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(form);
+        try {
+            const response = await Api.sendContact({
+                name: form.name,
+                email: form.email,
+                message: form.question,
+            });
+            console.log("Отправлено успешно:", response.data);
+            alert("Ваше сообщение отправлено!");
+            setForm({ email: "", name: "", question: "" });
+        } catch (error) {
+            console.error("Ошибка отправки:", error);
+            alert("Произошла ошибка при отправке сообщения.");
+        }
     };
 
     return (
@@ -59,14 +68,12 @@ export default function Contacts() {
                                 placeholder="Ваш Email"
                                 onChange={handleChange}
                             />
-
                             <FormInput
                                 name="name"
                                 value={form.name}
                                 placeholder="Имя"
                                 onChange={handleChange}
                             />
-
                             <FormInput
                                 name="question"
                                 value={form.question}
@@ -74,10 +81,7 @@ export default function Contacts() {
                                 textarea
                                 onChange={handleChange}
                             />
-
-                            <button className={s.contacts_btn}>
-                                Отправить
-                            </button>
+                            <button className={s.contacts_btn}>Отправить</button>
                         </form>
                     </div>
                 </div>

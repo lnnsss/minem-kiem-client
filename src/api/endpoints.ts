@@ -5,4 +5,6 @@ export const ENDPOINTS = {
     PRODUCT_CATEGORIES: "/products/categories",
     PRODUCTS_BY_CATEGORY: (slug: string) =>
         `/products/categories/${slug}`,
+
+    CONTACTS: "/contacts/",
 };

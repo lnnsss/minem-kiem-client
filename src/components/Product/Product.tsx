@@ -101,7 +101,7 @@ const Product = observer(() => {
                     </div>
 
                     <div className={s.product_info}>
-                        <h2>{product.name}</h2>
+                        <h2 className={s.product_info_title}>{product.name}</h2>
 
                         <span className={s.product_info_price}>
                             {productStore.currentVariant?.price ?? product.price} ₽

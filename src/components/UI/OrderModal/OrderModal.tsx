@@ -12,23 +12,20 @@ export const OrderModal = observer(() => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [deliveryAdress, setDeliveryAdress] = useState("");
-    const [delivery] = useState(400);
+    const [deliveryAddress, setDeliveryAddress] = useState("");
     const [comment, setComment] = useState("");
-
-    // проверка на то, что полня не пустые
-    const isFormFilled = [
-        name,
-        email,
-        phone,
-        deliveryAdress,
-        comment,
-    ].every(value => value.trim().length > 0);
-
     const [isAgreed, setIsAgreed] = useState(false);
 
+    const DELIVERY_COST = 400;
+
+    const isFormFilled =
+        name.trim() &&
+        email.trim() &&
+        phone.trim() &&
+        deliveryAddress.trim();
+
     const PRODUCTS_SUM = cart.productsTotalPrice;
-    const TOTAL_SUM = PRODUCTS_SUM + (deliveryAdress.length !== 0 ? delivery : 0);
+    const TOTAL_SUM = PRODUCTS_SUM + (deliveryAddress.trim() ? DELIVERY_COST : 0);
 
     useEffect(() => {
         if (modal.editingModalActive) {
@@ -41,38 +38,50 @@ export const OrderModal = observer(() => {
 
     if (!modal.editingModalActive) return null;
 
+    const handlePlaceOrder = async () => {
+        if (!isFormFilled || !isAgreed || cart.items.length === 0) return;
+
+        const customerInfo = {
+            full_name: name,
+            email,
+            phone,
+            shipping_address: deliveryAddress,
+            comment,
+        };
+
+        await cart.placeOrder(customerInfo);
+
+        if (!cart.error) {
+            modal.setEditingModalActive(false);
+            setName("");
+            setEmail("");
+            setPhone("");
+            setDeliveryAddress("");
+            setComment("");
+            setIsAgreed(false);
+        } else {
+            alert(`Ошибка: ${cart.error}`);
+        }
+    };
+
     return (
-        <div
-            className={s.overlay}
-            onClick={() =>
-                modal.setEditingModalActive(false)
-            }
-        >
-            <div
-                className={s.modal}
-                onClick={(e) => e.stopPropagation()}
-            >
+        <div className={s.overlay} onClick={() => modal.setEditingModalActive(false)}>
+            <div className={s.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={s.modal_header}>
                     <h2>Корзина</h2>
-                    <button
-                        onClick={() =>
-                            modal.setEditingModalActive(false)
-                        }
-                    >
+                    <button onClick={() => modal.setEditingModalActive(false)}>
                         <CloseIcon />
                     </button>
                 </div>
 
                 {/* ТОВАРЫ */}
                 <div className={s.modal_products}>
-                    {cart.items.length === 0 && (
-                        <p>Корзина пуста</p>
-                    )}
+                    {cart.items.length === 0 && <p>Корзина пуста</p>}
 
                     {cart.items.map((item) => (
                         <ModalProduct
                             key={item.variantId}
-                            slug={String(item.variantId)}
+                            slug={item.slug}
                             image={item.image!}
                             title={item.name}
                             size={item.size}
@@ -81,25 +90,12 @@ export const OrderModal = observer(() => {
                             variantId={item.variantId}
                         />
                     ))}
-
                 </div>
 
-                <h3 className={s.modal_Price}>
-                    Сумма: {PRODUCTS_SUM} руб
-                </h3>
+                <h3 className={s.modal_Price}>Сумма: {PRODUCTS_SUM} руб</h3>
 
-                <ModalInput
-                    label="ФИО"
-                    value={name}
-                    onChange={setName}
-                />
-
-                <ModalInput
-                    label="Еmail"
-                    value={email}
-                    onChange={setEmail}
-                />
-
+                <ModalInput label="ФИО" value={name} onChange={setName} />
+                <ModalInput label="Email" value={email} onChange={setEmail} />
                 <ModalInput
                     label="Телефон"
                     phone
@@ -107,14 +103,12 @@ export const OrderModal = observer(() => {
                     onChange={setPhone}
                     placeholder="+7 (___) ___-__-__"
                 />
-
                 <ModalInput
                     label="Адрес доставки (ближайший адрес пункта выдачи к вашему дому)"
-                    value={deliveryAdress}
-                    onChange={setDeliveryAdress}
+                    value={deliveryAddress}
+                    onChange={setDeliveryAddress}
                     placeholder="Казань, Кремлёвская, 8"
                 />
-
                 <ModalInput
                     label="Комментарий"
                     textarea
@@ -124,38 +118,48 @@ export const OrderModal = observer(() => {
 
                 {/* ИТОГО */}
                 <p className={s.modal_orderInfo}>
-                    Сумма: {PRODUCTS_SUM} руб
+                    Сумма товаров: {PRODUCTS_SUM} руб
                     <br />
-                    Доставка:{" "}
-                    {deliveryAdress.length != 0
-                        ? `${delivery} руб`
-                        : "не выбрана"}
+                    Доставка: {deliveryAddress.trim() ? `${DELIVERY_COST} руб` : "не выбрана"}
                     <br />
-                    {deliveryAdress ??
-                        "Пункт выдачи не выбран"}
+                    {deliveryAddress || "Пункт выдачи не выбран"}
                 </p>
 
-                <div className={s.modal_totalPrice}>
-                    Итоговая сумма: {TOTAL_SUM} руб
-                </div>
+                <div className={s.modal_totalPrice}>Итоговая сумма: {TOTAL_SUM} руб</div>
 
                 <div className={s.agreement}>
                     <label className={s.checkboxLabel}>
-                        <input type="checkbox" checked={isAgreed}
-                            onChange={(e) => setIsAgreed(e.target.checked)} />
+                        <input
+                            type="checkbox"
+                            checked={isAgreed}
+                            onChange={(e) => setIsAgreed(e.target.checked)}
+                        />
                         <span>
                             Я согласен с{" "}
-                            <a href="/oferta" target="_blank" className={s.docLink}>Договор-оферта</a>,{" "}
-                            <a href="/agreement" target="_blank" className={s.docLink}>Согласие на обработку персональных данных</a>,{" "}
-                            <a href="/politics" target="_blank" className={s.docLink}>Политика конфиденциальности</a>
+                            <a href="/oferta" target="_blank" className={s.docLink}>
+                                Договор-оферта
+                            </a>
+                            ,{" "}
+                            <a href="/agreement" target="_blank" className={s.docLink}>
+                                Согласие на обработку персональных данных
+                            </a>
+                            ,{" "}
+                            <a href="/politics" target="_blank" className={s.docLink}>
+                                Политика конфиденциальности
+                            </a>
                         </span>
                     </label>
                 </div>
 
-                <button className={s.buyBtn}
-                    disabled={ !isFormFilled || cart.items.length === 0 || !isAgreed}>
-                    К оплате
+                <button
+                    className={s.buyBtn}
+                    disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
+                    onClick={handlePlaceOrder}
+                >
+                    {cart.loading ? "Отправка..." : "К оплате"}
                 </button>
+
+                {cart.error && <p className={s.error}>{cart.error}</p>}
             </div>
         </div>
     );
