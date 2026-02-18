@@ -127,7 +127,6 @@ const Header = observer(({ theme = "green" }: HeaderProps) => {
                 </div>
             </div>
 
-            {/* MOBILE MENU */}
             <div
                 className={`${s.mobileMenu} ${
                     isMenuOpen

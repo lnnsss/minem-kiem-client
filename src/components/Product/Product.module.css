@@ -189,12 +189,12 @@
     border-radius: 5px;
 }
 
-/* ---------- МЕДИА-ЗАПРОСЫ ---------- */
+/*----media-------------------------------------------*/
 
 @media (max-width: 1023px) {
     .product_container {
         flex-direction: column;
-        padding: 200px 15px 50px 15px; /* контент на всю ширину, боковые отступы 15px */
+        padding: 200px 15px 50px 15px;
         gap: 30px;
     }
 

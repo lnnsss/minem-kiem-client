@@ -48,7 +48,6 @@
 
 /*----media-------------------------------------------*/
 
-/*----tablet----*/
 @media (max-width: 1124px) {
 
     .footer_container {
@@ -103,7 +102,6 @@
     }
 }
 
-/*----mobile----*/
 @media (max-width: 767px) {
     .footer_container {
         padding: 40px 15px 40px 15px;

@@ -69,9 +69,7 @@ const Products = observer(() => {
                     ) : (
                         <div className={s.products_grid}>
                             {catalog.items.map((item) => {
-                                const media = item.media
-                                    .slice()
-                                    .sort((a, b) => a.position - b.position);
+                                const images = item.images ?? [];
 
                                 return (
                                     <ProductsItem
@@ -79,8 +77,8 @@ const Products = observer(() => {
                                         slug={item.slug}
                                         title={item.name}
                                         price={Number(item.price)}
-                                        image={media[0]?.url}
-                                        hoverImage={media[1]?.url}
+                                        image={images[0]}
+                                        hoverImage={images[1]}
                                         inStock={catalog.hasStock(item)}
                                     />
                                 );

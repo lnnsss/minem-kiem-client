@@ -5,7 +5,6 @@
     width: 100%;
     z-index: 1000;
 }
-
 .header_container {
     width: 100%;
     padding: 20px;
@@ -13,13 +12,10 @@
     align-items: center;
     justify-content: space-between;
 }
-
-/* ---------- THEMES ---------- */
 .header_green {
     background-color: var(--main);
     color: var(--white);
 }
-
 .header_white {
     background-color: var(--white);
     color: #000000;
@@ -81,7 +77,6 @@
     background-color: currentColor;
     border-radius: 2px;
 }
-
 .header_burger_line:nth-child(1) { top: 0; }
 .header_burger_line:nth-child(2) { top: 50%; transform: translateY(-50%); }
 .header_burger_line:nth-child(3) { bottom: 0; }

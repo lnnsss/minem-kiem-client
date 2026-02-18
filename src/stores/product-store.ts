@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { Api } from "../api/api-helpers.ts";
 
-/* ======= TYPES ======= */
+/*----types-------------------------------------------*/
+
 export interface ProductVariant {
     id: number;
     size: string;
@@ -54,7 +55,8 @@ export interface Product {
     categories: ProductCategory[];
 }
 
-/* ======= STORE ======= */
+/*----store-------------------------------------------*/
+
 export class ProductStore {
     product: Product | null = null;
     selectedVariantId: number | null = null;

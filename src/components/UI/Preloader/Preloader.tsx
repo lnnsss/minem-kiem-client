@@ -8,12 +8,12 @@ export default function Preloader() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setFadeOut(true); // Сначала fade класс
+            setFadeOut(true);
         }, 2000);
 
         const fadeTimer = setTimeout(() => {
-            setIsVisible(false); // Потом скрыть
-        }, 2800); // +0.8s на transition
+            setIsVisible(false);
+        }, 2800);
 
         return () => {
             clearTimeout(timer);

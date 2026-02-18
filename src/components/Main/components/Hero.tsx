@@ -51,8 +51,8 @@ const Hero = observer(() => {
                         </button>
                     </nav>
 
-                    <div className={s.burgerWithCart} onClick={() => modal.setEditingModalActive(true)}>
-                        <button className={s.cart_mobile}>
+                    <div className={s.burgerWithCart}>
+                        <button className={s.cart_mobile} onClick={() => modal.setEditingModalActive(true)}>
                             <span className={s.cartCounter}>{cartCounter || ''}</span>
                             <img src={cartIcon} alt="Корзина" />
                         </button>

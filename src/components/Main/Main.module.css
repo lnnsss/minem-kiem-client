@@ -1,5 +1,3 @@
-/*----hero-------------------------------------------*/
-
 .hero {
     width: 100%;
     height: 900px;
@@ -51,13 +49,13 @@
 }
 .headerScrolled {
     backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(31, 41, 55, 0.4); /* Темнее - серо-синий стеклянный */
+    background: rgba(31, 41, 55, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Меньше тени */
-    border-radius: 0 0 20px 20px; /* Скругление только нижних углов */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 20px 20px;
 }
 .headerScrolled::before {
-    content: none; /* Убираем псевдоэлемент полностью */
+    content: none;
 }
 .headerScrolled .header_link,
 .headerScrolled .header_li {
@@ -162,7 +160,7 @@
     cursor: pointer;
 }
 .header_burger {
-    display: none; /* Скрыт на десктопе */
+    display: none;
     width: 30px;
     height: 18px;
     padding: 0;
@@ -184,12 +182,10 @@
 .header_burger_line:nth-child(1) {
     top: 0;
 }
-
 .header_burger_line:nth-child(2) {
     top: 50%;
     transform: translateY(-50%);
 }
-
 .header_burger_line:nth-child(3) {
     bottom: 0;
 }
@@ -213,8 +209,6 @@
 .cart_mobile {
     display: none;
 }
-/* ===== MOBILE DROPDOWN MENU ===== */
-
 .mobileMenu {
     position: fixed;
     top: 0;
@@ -231,11 +225,9 @@
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 900;
 }
-
 .mobileMenu_open {
     transform: translateX(-50%) translateY(0);
 }
-
 .mobileMenu_list {
     list-style: none;
     padding: 0;
@@ -245,7 +237,6 @@
     align-items: center;
     gap: 25px;
 }
-
 .mobileMenu_list li a {
     color: var(--white);
     font-size: 20px;
@@ -254,7 +245,6 @@
     text-decoration: none;
     transition: opacity 0.3s ease;
 }
-
 .mobileMenu_list li a:hover {
     opacity: 0.7;
 }
@@ -664,14 +654,12 @@ main {
 
 /*----media-------------------------------------------*/
 
-/*----desktop----*/
 @media (max-width: 1440px) {
     .rnmntLeft, .rnmntRight {
         display: none;
     }
 }
 
-/*----tablet----*/
 @media (max-width: 1124px) {
 
     /*----hero-------------------------------------------*/
@@ -805,7 +793,6 @@ main {
     }
 }
 
-/*----mobile----*/
 @media (max-width: 768px) {
 
     .title {

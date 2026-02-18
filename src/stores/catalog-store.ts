@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import type { RootStore } from "./root-store";
 import { Api } from "../api/api-helpers";
 
-/* ======= TYPES ======= */
+/*----types-------------------------------------------*/
 
 export interface ProductVariant {
     id: number;
@@ -19,23 +19,17 @@ export interface ProductCategory {
     slug: string;
 }
 
-export interface ProductMedia {
-    url: string;
-    type: "image";
-    position: number;
-}
-
 export interface Product {
     id: number;
     name: string;
     slug: string;
     price: string;
-    media: ProductMedia[];
+    images: string[];
     variants: ProductVariant[];
     categories: ProductCategory[];
 }
 
-/* ======= API RESPONSES ======= */
+/*----api-responses-------------------------------------------*/
 
 interface ProductsResponse {
     results: {
@@ -43,7 +37,7 @@ interface ProductsResponse {
         name: string;
         slug: string;
         price: string;
-        main_image: string;
+        images: string[];
         in_stock: boolean;
         group: ProductCategory;
     }[];
@@ -53,7 +47,7 @@ interface CategoriesResponse {
     results: ProductCategory[];
 }
 
-/* ======= STORE ======= */
+/*----store-------------------------------------------*/
 
 export class CatalogStore {
     root: RootStore;
@@ -67,7 +61,7 @@ export class CatalogStore {
         this.root = root;
     }
 
-    /* ======= MAPPER ======= */
+    /*----mapper-------------------------------------------*/
 
     private mapProduct(
         item: ProductsResponse["results"][number]
@@ -77,13 +71,7 @@ export class CatalogStore {
             name: item.name,
             slug: item.slug,
             price: item.price,
-            media: [
-                {
-                    url: item.main_image,
-                    type: "image",
-                    position: 0
-                }
-            ],
+            images: item.images ?? [],
             variants: [
                 {
                     id: item.id,
@@ -98,7 +86,7 @@ export class CatalogStore {
         };
     }
 
-    /* ======= API ======= */
+    /*----api-------------------------------------------*/
 
     async fetchCategories() {
         try {
@@ -152,7 +140,7 @@ export class CatalogStore {
         }
     }
 
-    /* ======= HELPERS ======= */
+    /*----helpers-------------------------------------------*/
 
     hasStock(product: Product) {
         return product.variants.some(
