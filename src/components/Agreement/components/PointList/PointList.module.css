@@ -1,0 +1,12 @@
+.content_block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.content_block h4 {
+    font-weight: 500;
+}
+.content_block li {
+    margin-left: 20px;
+    list-style-type: disc;
+}

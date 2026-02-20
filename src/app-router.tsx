@@ -4,7 +4,7 @@ import ProductPage from "./pages/ProductPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ContactsPage from "./pages/ContactsPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import AgreementPage from "./pages/OfertaPage.tsx";
+import AgreementPage from "./pages/AgreementPage.tsx";
 import PoliticsPage from "./pages/PoliticsPage.tsx";
 import OfertaPage from "./pages/OfertaPage.tsx";
 

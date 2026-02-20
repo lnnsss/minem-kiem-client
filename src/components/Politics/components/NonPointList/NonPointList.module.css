@@ -1,0 +1,13 @@
+.content_block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.content_block h4 {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+}
+.content_block li {
+    white-space: pre-line;
+}

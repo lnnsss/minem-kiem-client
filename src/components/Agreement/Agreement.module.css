@@ -1,0 +1,93 @@
+.agreement {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+/* Декорации только для ПК ≥1440px */
+.leftRnmnt,
+.rightRnmnt {
+    display: none;
+}
+.agreement_container {
+    position: relative;
+    max-width: 960px;
+    width: 100%;
+    padding: 100px 20px 100px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+.title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+.title h2 {
+    font-size: 42px;
+    font-weight: 600;
+    text-align: center;
+}
+.title span {
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+}
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.content h3 {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+}
+.content_block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/*----media-------------------------------------------*/
+
+@media (min-width: 1440px) {
+    .leftRnmnt,
+    .rightRnmnt {
+        display: block;
+        position: absolute;
+        top: 0;
+        height: 100%;
+    }
+    .leftRnmnt { left: 0; }
+    .rightRnmnt { right: 0; }
+}
+
+@media (max-width: 768px) {
+    .title h2 {
+        font-size: 32px;
+    }
+    .title span {
+        font-size: 20px;
+    }
+    .agreement_container {
+        padding-bottom: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title h2 {
+        font-size: 24px;
+    }
+    .title span {
+        font-size: 16px;
+    }
+}
