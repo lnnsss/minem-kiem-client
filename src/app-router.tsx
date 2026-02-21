@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage.tsx";
 import AgreementPage from "./pages/AgreementPage.tsx";
 import PoliticsPage from "./pages/PoliticsPage.tsx";
 import OfertaPage from "./pages/OfertaPage.tsx";
+import OrderInfoPage from "./pages/OrderInfoPage.tsx";
 
 export const AppRouter = () => {
     return (
@@ -18,9 +19,11 @@ export const AppRouter = () => {
             <Route path="/contacts" element={<ContactsPage />} />
 
             <Route path="/agreement" element={<AgreementPage />} />
-                <Route path="/politics" element={<PoliticsPage />} />
+            <Route path="/politics" element={<PoliticsPage />} />
             <Route path="/oferta" element={<OfertaPage />} />
 
+            <Route path="/order/info" element={<OrderInfoPage />} />
+            
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
     );

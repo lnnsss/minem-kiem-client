@@ -7,4 +7,6 @@ export const ENDPOINTS = {
         `/products/categories/${slug}`,
 
     CONTACTS: "/contacts/",
+
+    ORDER: (id: string) => `/orders/${id}`,
 };
