@@ -1,6 +1,7 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
-import type { Product, ProductVariant } from "./product-store.ts";
-import { api } from "../api/axios-client.ts";
+import type { Product, ProductVariant } from "./product-store";
+import { api } from "../api/axios-client";
+import { Api } from "../api/api-helpers";
 
 export interface CartItem {
     productId: number;
@@ -24,11 +25,28 @@ export class CartStore {
 
     constructor() {
         makeAutoObservable(this);
+
         this.loadFromStorage();
+        this.syncCartWithBackend();
 
         reaction(
             () => this.items.map((i) => ({ ...i })),
             () => this.saveToStorage()
+        );
+    }
+
+    /* =======================
+       GETTERS
+    ======================= */
+
+    get totalItemsCount() {
+        return this.items.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    get productsTotalPrice() {
+        return this.items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
         );
     }
 
@@ -39,21 +57,27 @@ export class CartStore {
         return item?.quantity || 0;
     }
 
+    /* =======================
+       CART ACTIONS
+    ======================= */
+
     addToCart(product: Product, variant: ProductVariant, quantity = 1) {
         const existing = this.items.find(
-            (i) => i.productId === product.id && i.variantId === variant.id
+            (i) =>
+                i.productId === product.id &&
+                i.variantId === variant.id
         );
 
-        const currentInCart = existing ? existing.quantity : 0;
-        const totalQuantity = currentInCart + quantity;
-        
-        if (totalQuantity > variant.stock) {
+        const current = existing ? existing.quantity : 0;
+        const total = current + quantity;
+
+        if (total > variant.stock) {
             alert(`Нельзя добавить больше ${variant.stock} шт.`);
             return;
         }
 
         if (existing) {
-            existing.quantity = totalQuantity;
+            existing.quantity = total;
             return;
         }
 
@@ -61,8 +85,8 @@ export class CartStore {
             productId: product.id,
             variantId: variant.id,
             name: product.name,
-            size: variant.size,
             slug: product.slug,
+            size: variant.size,
             color: product.color.name,
             price: variant.price,
             quantity,
@@ -98,20 +122,18 @@ export class CartStore {
     }
 
     removeFromCart(variantId: number) {
-        this.items = this.items.filter((i) => i.variantId !== variantId);
+        this.items = this.items.filter(
+            (i) => i.variantId !== variantId
+        );
     }
 
     clearCart() {
         this.items = [];
     }
 
-    get totalItemsCount() {
-        return this.items.reduce((sum, item) => sum + item.quantity, 0);
-    }
-
-    get productsTotalPrice() {
-        return this.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    }
+    /* =======================
+       STORAGE
+    ======================= */
 
     saveToStorage() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.items));
@@ -127,6 +149,53 @@ export class CartStore {
             this.items = [];
         }
     }
+
+    /* =======================
+       VARIANTS
+    ======================= */
+
+    async syncCartWithBackend() {
+        if (this.items.length === 0) return;
+
+        const updatedItems: CartItem[] = [];
+
+        for (const item of this.items) {
+            try {
+                const response = await Api.getProduct(item.slug);
+                const product = response.data;
+
+                const variant = product.variants.find(
+                    (v: any) => v.id === item.variantId
+                );
+
+                if (!variant || !variant.is_active || variant.stock <= 0) {
+                    continue;
+                }
+
+                const safeQuantity = Math.min(
+                    item.quantity,
+                    variant.stock
+                );
+
+                updatedItems.push({
+                    ...item,
+                    price: Number(variant.price),
+                    stock: variant.stock,
+                    quantity: safeQuantity,
+                });
+            } catch {
+                continue;
+            }
+        }
+
+        runInAction(() => {
+            this.items = updatedItems;
+        });
+    }
+
+    /* =======================
+       ORDER
+    ======================= */
 
     async placeOrder(customerInfo: {
         full_name: string;
@@ -168,7 +237,8 @@ export class CartStore {
         } catch (err: any) {
             runInAction(() => {
                 this.error =
-                    err?.response?.data?.message || "Ошибка при оформлении заказа";
+                    err?.response?.data?.message ||
+                    "Ошибка при оформлении заказа";
                 this.loading = false;
             });
         }
