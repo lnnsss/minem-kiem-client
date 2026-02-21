@@ -12,8 +12,8 @@ export interface CartItem {
     price: number;
     quantity: number;
     image?: string;
+    stock: number;
 }
-
 
 const STORAGE_KEY = "cart";
 
@@ -32,13 +32,28 @@ export class CartStore {
         );
     }
 
+    getItemQuantity(productId: number, variantId: number) {
+        const item = this.items.find(
+            (i) => i.productId === productId && i.variantId === variantId
+        );
+        return item?.quantity || 0;
+    }
+
     addToCart(product: Product, variant: ProductVariant, quantity = 1) {
         const existing = this.items.find(
             (i) => i.productId === product.id && i.variantId === variant.id
         );
 
+        const currentInCart = existing ? existing.quantity : 0;
+        const totalQuantity = currentInCart + quantity;
+        
+        if (totalQuantity > variant.stock) {
+            alert(`Нельзя добавить больше ${variant.stock} шт.`);
+            return;
+        }
+
         if (existing) {
-            existing.quantity += quantity;
+            existing.quantity = totalQuantity;
             return;
         }
 
@@ -52,12 +67,23 @@ export class CartStore {
             price: variant.price,
             quantity,
             image: product.media[0]?.url,
+            stock: variant.stock,
         });
+    }
+
+    canIncreaseQuantity(variantId: number) {
+        const item = this.items.find((i) => i.variantId === variantId);
+        if (!item) return false;
+        return item.quantity < item.stock;
     }
 
     increaseQuantity(variantId: number) {
         const item = this.items.find((i) => i.variantId === variantId);
-        if (item) item.quantity += 1;
+        if (!item || !this.canIncreaseQuantity(variantId)) {
+            alert(`Нельзя добавить больше ${item?.stock || 0} шт.`);
+            return;
+        }
+        item.quantity += 1;
     }
 
     decreaseQuantity(variantId: number) {

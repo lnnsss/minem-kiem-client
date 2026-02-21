@@ -29,7 +29,7 @@
     width: 100%;
     padding: 160px 20px 100px 20px;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     gap: 80px;
 }
@@ -190,6 +190,12 @@
 }
 
 /*----media-------------------------------------------*/
+
+@media (max-width: 1023px) {
+    .product_container {
+        align-items: center;
+    }
+}
 
 @media (max-width: 1023px) {
     .product_container {

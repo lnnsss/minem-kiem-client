@@ -88,6 +88,9 @@ export const OrderModal = observer(() => {
                             count={item.quantity}
                             price={item.price}
                             variantId={item.variantId}
+                            onIncrease={() => cart.increaseQuantity(item.variantId)}
+                            onDecrease={() => cart.decreaseQuantity(item.variantId)}
+                            canIncrease={cart.canIncreaseQuantity(item.variantId)}
                         />
                     ))}
                 </div>

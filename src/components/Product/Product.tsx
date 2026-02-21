@@ -116,7 +116,7 @@ const Product = observer(() => {
                                         key={v.size}
                                         className={`${s.size_btn} ${
                                             productStore.currentVariant?.size === v.size ? s.size_btn_active : ""
-                                        } ${v.stock === 0 ? s.size_btn_disabled : ""}`} // добавляем класс для заблокированных
+                                        } ${v.stock === 0 ? s.size_btn_disabled : ""}`}
                                         onClick={() => productStore.selectVariant(v.size)}
                                         disabled={v.stock === 0}
                                     >

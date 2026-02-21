@@ -14,7 +14,11 @@ interface ModalProductProps {
     count: number;
     price: number;
     variantId: number;
+    onIncrease: () => void;
+    onDecrease: () => void;
+    canIncrease: boolean;
 }
+
 
 const ModalProduct = observer(
     ({
