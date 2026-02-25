@@ -80,6 +80,7 @@ const Products = observer(() => {
                                         image={images[0]}
                                         hoverImage={images[1]}
                                         inStock={catalog.hasStock(item)}
+                                        isPreorder={item.isPreorder}
                                     />
                                 );
                             })}

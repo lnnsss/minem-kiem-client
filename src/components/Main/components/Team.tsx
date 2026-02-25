@@ -7,7 +7,7 @@ export default function Team() {
     return (
         <section id="team" className={s.team}>
             <div className={`__container ${s.team_container}`}>
-                <h2 className={s.title}>Наша команда</h2>
+                <h2 className={s.title}>Основатели</h2>
                 <div className={s.team_cards}>
                     <div className={`${s.team_card} ${s.team_card_wphoto}`}>
                         <img src={pin} alt="Пин" className={s.team_card_pin} />

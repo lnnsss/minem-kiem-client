@@ -278,4 +278,16 @@
     .products_item_inStock {
         font-size: 10px;
     }
+    .preOrder {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 99;
+        background-color: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 2px 5px;
+        font-size: 10px;
+        color: var(--grey);
+    }
 }

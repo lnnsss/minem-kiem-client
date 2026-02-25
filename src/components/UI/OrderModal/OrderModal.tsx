@@ -107,7 +107,7 @@ export const OrderModal = observer(() => {
                     placeholder="+7 (___) ___-__-__"
                 />
                 <ModalInput
-                    label="Адрес доставки (ближайший адрес пункта выдачи к вашему дому)"
+                    label="Адрес доставки"
                     value={deliveryAddress}
                     onChange={setDeliveryAddress}
                     placeholder="Казань, Кремлёвская, 8"

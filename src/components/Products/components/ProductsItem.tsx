@@ -8,9 +8,10 @@ interface ProductsItemProps {
     title: string;
     price: number;
     inStock?: boolean;
+    isPreorder: boolean;
 }
 
-const ProductsItem = ({ slug, image, hoverImage, title, price, inStock = true }: ProductsItemProps)  => {
+const ProductsItem = ({ slug, image, hoverImage, title, price, inStock = true, isPreorder }: ProductsItemProps)  => {
     const hasHover = Boolean(hoverImage) && inStock;
 
     return (
@@ -30,7 +31,7 @@ const ProductsItem = ({ slug, image, hoverImage, title, price, inStock = true }:
                 <img src={image} alt={title} className={s.products_item_image_main_single} />
             )}
 
-            {true && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ</h5>}
+            {isPreorder && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ</h5>}
 
             <div className={s.products_item_text}>
                 <h4 className={s.products_item_title}>{title}</h4>

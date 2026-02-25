@@ -27,6 +27,7 @@ export interface Product {
     images: string[];
     variants: ProductVariant[];
     categories: ProductCategory[];
+    isPreorder: boolean;
 }
 
 /*----api-responses-------------------------------------------*/
@@ -39,6 +40,7 @@ interface ProductsResponse {
         price: string;
         images: string[];
         in_stock: boolean;
+        is_preorder: boolean;
         group: ProductCategory;
     }[];
 }
@@ -82,7 +84,8 @@ export class CatalogStore {
                     is_active: true
                 }
             ],
-            categories: [item.group]
+            categories: [item.group],
+            isPreorder: item.is_preorder
         };
     }
 
