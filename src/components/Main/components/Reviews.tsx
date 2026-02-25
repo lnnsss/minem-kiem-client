@@ -19,9 +19,9 @@ export default function Reviews() {
                 <div className={s.reviews_blocks}>
                     <div className={s.reviews_block}>
                         <div className={s.reviews_block_header}>
-                            <img src={reviews1} alt="Ринат" className={s.reviews_block_avatar} />
+                            <img src={reviews1} alt="Айгиз" className={s.reviews_block_avatar} />
                             <div className={s.reviews_block_info}>
-                                <span className={s.reviews_block_name}>Ринат</span>
+                                <span className={s.reviews_block_name}>Айгиз</span>
                                 <div className={s.reviews_block_stars}>
                                     <Star />
                                     <Star />
@@ -31,34 +31,17 @@ export default function Reviews() {
                                 </div>
                             </div>
                         </div>
-                        <p className={s.reviews_block_text}>Заказывал лонгслив с принтом на татарском — качество огонь,
-                            швы ровные, ткань плотная. Порадовало, что размер сел точно по сетке. На улице несколько раз
-                            спрашивали, где взял такой принт. Доставка быстрая, упаковка аккуратная.</p>
-                    </div>
-                    <div className={s.reviews_block}>
-                        <div className={s.reviews_block_header}>
-                            <img src={reviews2} alt="Марат" className={s.reviews_block_avatar} />
-                            <div className={s.reviews_block_info}>
-                                <span className={s.reviews_block_name}>Марат</span>
-                                <div className={s.reviews_block_stars}>
-                                    <Star />
-                                    <Star />
-                                    <Star />
-                                    <Star />
-                                    <Star />
-                                </div>
-                            </div>
-                        </div>
-                        <p className={s.reviews_block_text}>Взял футболку «мемную» брату в подарок — попал в точку!
-                            Цвет не полинял после стирки, принт чёткий, без трещинок. Очень нравится, что шрифты
-                            и фразы — родные, свои. Теперь присматриваю худи.
+                        <p className={s.reviews_block_text}>
+                            Качество изделия на высоте! Принт после стирки остается таким же четким и качественным. 
+                            Отдельная приятность - это открытка, очень сильно согревает душу)) 
+                            В данный момент не вижу никаких недостатков, буду заказывать дальше!
                         </p>
                     </div>
                     <div className={s.reviews_block}>
                         <div className={s.reviews_block_header}>
-                            <img src={reviews3} alt="Тимур" className={s.reviews_block_avatar} />
+                            <img src={reviews2} alt="Карима" className={s.reviews_block_avatar} />
                             <div className={s.reviews_block_info}>
-                                <span className={s.reviews_block_name}>Тимур</span>
+                                <span className={s.reviews_block_name}>Карима</span>
                                 <div className={s.reviews_block_stars}>
                                     <Star />
                                     <Star />
@@ -68,9 +51,32 @@ export default function Reviews() {
                                 </div>
                             </div>
                         </div>
-                        <p className={s.reviews_block_text}>Оформил предзаказ на лонгслив: пришёл вовремя, посадка свободная,
-                            как люблю. Принт смешной и при этом про наше — сразу настроение поднимает.
-                            Служба поддержки быстро ответила по размеру, помогли выбрать. Отличный бренд, будем брать ещё.</p>
+                        <p className={s.reviews_block_text}>Вы со мной уже больше 1,5 лет. В идеальном состоянии и качестве. 
+                            Вот накоплю денег побольше, я куплю все. Если выпустите однажды полный комплект (как вы уже выпускали, 
+                            но в разных цветах и вообще разных лекал) я точно куплю себе еще один. Потому что он сидит идеально, выглядит идеально, 
+                            сколько не стирай и не пачкай - все отстирывается. Ну и конечно очень приятно ходить по Москве и кричать своим свитшотом 
+                            о том, что я татарка.
+                        </p>
+                    </div>
+                    <div className={s.reviews_block}>
+                        <div className={s.reviews_block_header}>
+                            <img src={reviews3} alt="Карим" className={s.reviews_block_avatar} />
+                            <div className={s.reviews_block_info}>
+                                <span className={s.reviews_block_name}>Карим</span>
+                                <div className={s.reviews_block_stars}>
+                                    <Star />
+                                    <Star />
+                                    <Star />
+                                    <Star />
+                                    <Star />
+                                </div>
+                            </div>
+                        </div>
+                        <p className={s.reviews_block_text}>
+                            Минем кием это что-то особенное. Очень рад, что однажды решил поучаствовать в конкурсе и победил! 
+                            Вещи действительно крутые, стильные. Спасибо бренду за развитие татарской культуры, 
+                            и что радуете такими крутыми вещами!
+                        </p>
                     </div>
                 </div>
             </div>

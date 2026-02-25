@@ -50,13 +50,13 @@ export default function Footer() {
                     <ul className={s.footer_ul}>
                         <h5>Контакты</h5>
                         <li className={s.footer_li}>
-                            <a href="tel:89171234567" className={s.footer_link}>8 917 123-45-67</a>
+                            <a href="tel:89951333051" className={s.footer_link}>+7 995 133-30-51</a>
                         </li>
                         <li className={s.footer_li}>
-                            <a href="mailto:minemkiem@gmail.ru" className={s.footer_link}>minemkiem@gmail.ru</a>
+                            <a href="mailto:minem.kiem@gmail.com" className={s.footer_link}>minem.kiem@gmail.com</a>
                         </li>
                         <li className={s.footer_li}>
-                            Казань, ул. Московская 70
+                            Казань, ул. Губкина 15
                         </li>
                     </ul>
 

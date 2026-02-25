@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import cartIcon from "../assets/images/cart.png";
 import {useStores} from "../../../stores/use-stores.ts";
 import {observer} from "mobx-react-lite";
+import CartIcon from './CartIcon.tsx';
 
 const Hero = observer(() => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -47,14 +48,14 @@ const Hero = observer(() => {
 
                         <button className={s.cart} onClick={() => modal.setEditingModalActive(true)}>
                             <span className={s.cartCounter}>{cartCounter || ''}</span>
-                            <img src={cartIcon} alt="Корзина" />
+                            <CartIcon/>
                         </button>
                     </nav>
 
                     <div className={s.burgerWithCart}>
                         <button className={s.cart_mobile} onClick={() => modal.setEditingModalActive(true)}>
                             <span className={s.cartCounter}>{cartCounter || ''}</span>
-                            <img src={cartIcon} alt="Корзина" />
+                            <CartIcon/>
                         </button>
 
                         <button

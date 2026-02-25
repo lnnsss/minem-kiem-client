@@ -30,6 +30,8 @@ const ProductsItem = ({ slug, image, hoverImage, title, price, inStock = true }:
                 <img src={image} alt={title} className={s.products_item_image_main_single} />
             )}
 
+            {true && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ</h5>}
+
             <div className={s.products_item_text}>
                 <h4 className={s.products_item_title}>{title}</h4>
                 <span className={s.products_item_price}>{price} ₽</span>

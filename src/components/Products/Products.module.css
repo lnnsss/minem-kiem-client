@@ -100,12 +100,24 @@
 
 /* ITEM */
 .products_item {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 320px;
     cursor: pointer;
 }
-
+.preOrder {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 99;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--grey);
+}
 .products_item_image_wrapper {
     position: relative;
     width: 320px;

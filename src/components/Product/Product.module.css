@@ -121,11 +121,19 @@
     max-width: 555px;
     width: 100%;
 }
-
+.titlePreOrder {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .product_info_title {
     font-size: 24px;
     font-weight: 600;
     color: #000000;
+}
+.preOrder {
+    font-size: 14px;
+    
 }
 
 .product_info_price {
