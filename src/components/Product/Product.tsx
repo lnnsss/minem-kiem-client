@@ -103,7 +103,7 @@ const Product = observer(() => {
                     <div className={s.product_info}>
                         <div className={s.titlePreOrder}>
                             <h2 className={s.product_info_title}>{product.name}</h2>
-                            {true && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ: Срок доставки до 21 дня</h5>}
+                            {productStore.isPreorder && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ: Срок доставки до 21 дня</h5>}
                         </div>
 
                         <span className={s.product_info_price}>

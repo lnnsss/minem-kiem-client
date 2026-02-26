@@ -53,6 +53,7 @@ export interface Product {
     variants: ProductVariant[];
     related_colors: ProductColor[];
     categories: ProductCategory[];
+    is_preorder: boolean;
 }
 
 /*----store-------------------------------------------*/
@@ -107,6 +108,10 @@ export class ProductStore {
     get isInStock() {
         const variant = this.currentVariant;
         return !!variant && variant.stock > 0 && variant.is_active;
+    }
+
+    get isPreorder() {
+        return this.product?.is_preorder || false;
     }
 
     get mainImage() {
