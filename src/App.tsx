@@ -25,8 +25,6 @@ export default function App() {
                 <meta property="og:url" content="https://minem-kiem.ru/" />
                 <meta property="og:image" content="https://minem-kiem.ru/favicon.ico" />
                 <meta property="og:locale" content="ru_RU" />
-
-                <meta name="google-site-verification" content="aeg7ojJ-0SJsH8IgOj7marfX8YeQpTrgqCOyzAT4qDg" />
             </Helmet>
             <BrowserRouter>
                 <ScrollToTop />
