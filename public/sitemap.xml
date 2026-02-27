@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Главная -->
+    <url>
+        <loc>https://minem-kiem.ru/</loc>
+    </url>
+
+    <!-- Список товаров -->
+    <url>
+        <loc>https://minem-kiem.ru/shop</loc>
+    </url>
+
+    <!-- Контакты -->
+    <url>
+        <loc>https://minem-kiem.ru/contacts</loc>
+    </url>
+
+    <!-- Пользовательское соглашение -->
+    <url>
+        <loc>https://minem-kiem.ru/agreement</loc>
+    </url>
+
+    <!-- Политика конфиденциальности -->
+    <url>
+        <loc>https://minem-kiem.ru/politics</loc>
+    </url>
+
+    <!-- Оферта -->
+    <url>
+        <loc>https://minem-kiem.ru/oferta</loc>
+    </url>
+
+    <!-- Информация о заказе -->
+    <url>
+        <loc>https://minem-kiem.ru/order/info</loc>
+    </url>
+</urlset>

@@ -18,6 +18,12 @@ const Product = observer(() => {
 
     const product = productStore.product;
     const media = product?.media || [];
+    const sizeOrder = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
+
+    const sortedSizes = [...productStore.availableSizes].sort(
+        (a, b) => sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size)
+    );
+
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,7 +120,7 @@ const Product = observer(() => {
                             <span>Размер</span>
 
                             <div className={s.size_btns}>
-                                {productStore.availableSizes.map((v) => (
+                                {sortedSizes.map((v) => (
                                     <button
                                         key={v.size}
                                         className={`${s.size_btn} ${
