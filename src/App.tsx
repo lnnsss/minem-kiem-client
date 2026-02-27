@@ -23,7 +23,7 @@ export default function App() {
                 <meta property="og:description" content="Российский бренд одежды из Татарстана." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://minem-kiem.ru/" />
-                <meta property="og:image" content="https://minem-kiem.ru/favicon.ico" />
+                <meta property="og:image" content="https://minem-kiem.ru/favicon.png" />
                 <meta property="og:locale" content="ru_RU" />
             </Helmet>
             <BrowserRouter>

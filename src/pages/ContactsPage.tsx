@@ -19,7 +19,7 @@ export default function ContactsPage() {
                 <meta property="og:description" content="Контакты бренда MINEM KIEM: email, соцсети и адрес для сотрудничества и заказов." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://minem-kiem.ru/contacts" />
-                <meta property="og:image" content="https://minem-kiem.ru/favicon.ico" />
+                <meta property="og:image" content="https://minem-kiem.ru/favicon.png" />
                 <meta property="og:locale" content="ru_RU" />
             </Helmet>
 

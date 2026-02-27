@@ -20,7 +20,7 @@ export default function ProductsPage() {
                 <meta property="og:description" content="Каталог бренда MINEM KIEM: футболки, свитшоты, худи и др." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://minem-kiem.ru/shop" />
-                <meta property="og:image" content="https://minem-kiem.ru/favicon.ico" />
+                <meta property="og:image" content="https://minem-kiem.ru/favicon.png" />
                 <meta property="og:locale" content="ru_RU" />
             </Helmet>
 
