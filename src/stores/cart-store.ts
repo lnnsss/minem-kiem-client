@@ -197,13 +197,16 @@ export class CartStore {
        ORDER
     ======================= */
 
-    async placeOrder(customerInfo: {
-        full_name: string;
-        email: string;
-        phone: string;
-        shipping_address: string;
-        comment?: string;
-    }) {
+    async placeOrder(
+        customerInfo: {
+            full_name: string;
+            email: string;
+            phone: string;
+            shipping_address: string;
+            comment?: string;
+        },
+        payment_method: "sbp" | "sber_bnpl" = "sbp"
+    ) {
         if (this.items.length === 0) {
             this.error = "Корзина пуста";
             return;
@@ -215,6 +218,7 @@ export class CartStore {
                 quantity: i.quantity.toString(),
             })),
             customer_info: customerInfo,
+            payment_method,
         };
 
         this.loading = true;

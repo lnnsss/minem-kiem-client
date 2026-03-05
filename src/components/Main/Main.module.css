@@ -149,6 +149,18 @@
     text-align: center;
     max-width: 926px;
 }
+.hero_catalogLink {
+    margin-bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 40px;
+    border: 1px solid var(--white);
+    border-radius: 20px;
+    color: var(--white);
+    font-size: 20px;
+    font-weight: 500;
+}
 .hero_arrowBtn {
     height: 40px;
     width: 40px;
@@ -831,6 +843,11 @@ main {
         flex-direction: column;
         justify-content: space-between;
         gap: 0;
+    }
+    .hero_catalogLink {
+        padding: 10px 30px;
+        font-size: 18px;
+        font-weight: 500;
     }
 
     /*----about-------------------------------------------*/

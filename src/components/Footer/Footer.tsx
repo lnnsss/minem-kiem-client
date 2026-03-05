@@ -7,8 +7,8 @@ export default function Footer() {
         <footer className={s.footer}>
             <div className={`__container ${s.footer_container}`}>
                 <div className={s.footer_left}>
-                    <a
-                        href="index.html"
+                    <Link
+                        to={'/'}
                         className={`${s.footer_logo} ${s.footer_logo_desktop}`}
                     >
                         <img
@@ -16,7 +16,7 @@ export default function Footer() {
                             alt="Минем Кием"
                             className={`${s.footer_logo} ${s.footer_logo_desktop}`}
                         />
-                    </a>
+                    </Link>
                     <span>© 2026 Минем Кием.</span>
                 </div>
 

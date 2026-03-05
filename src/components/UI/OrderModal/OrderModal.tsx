@@ -38,7 +38,9 @@ export const OrderModal = observer(() => {
 
     if (!modal.editingModalActive) return null;
 
-    const handlePlaceOrder = async () => {
+    const handlePlaceOrder = async (
+        paymentMethod: "sbp" | "sber_bnpl" = "sbp"
+    ) => {
         if (!isFormFilled || !isAgreed || cart.items.length === 0) return;
 
         const customerInfo = {
@@ -49,7 +51,7 @@ export const OrderModal = observer(() => {
             comment,
         };
 
-        await cart.placeOrder(customerInfo);
+        await cart.placeOrder(customerInfo, paymentMethod);
 
         if (!cart.error) {
             modal.setEditingModalActive(false);
@@ -153,14 +155,25 @@ export const OrderModal = observer(() => {
                         </span>
                     </label>
                 </div>
+                <div className={s.buyBtns}>
+                    {/*ОБЫЧНАЯ ОПЛАТА*/}
+                    <button
+                        className={s.buyBtn}
+                        disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
+                        onClick={() => handlePlaceOrder("sbp")}
+                    >
+                        {cart.loading ? "Отправка..." : "К оплате"}
+                    </button>
 
-                <button
-                    className={s.buyBtn}
-                    disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
-                    onClick={handlePlaceOrder}
-                >
-                    {cart.loading ? "Отправка..." : "К оплате"}
-                </button>
+                    {/*ПЛАТИ ЧАСТЯМИ*/}
+                    <button
+                        className={`${s.buyBtn} ${s.buyBtn_pc}`}
+                        disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
+                        onClick={() => handlePlaceOrder("sber_bnpl")}
+                    >
+                        {cart.loading ? "Отправка..." : "Плати частями"}
+                    </button>
+                </div>
 
                 {cart.error && <p className={s.error}>{cart.error}</p>}
             </div>

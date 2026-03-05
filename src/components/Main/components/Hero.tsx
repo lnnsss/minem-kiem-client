@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import s from "../Main.module.css";
 import logo from '../assets/images/logo.png';
 import { Link } from "react-router-dom";
-import cartIcon from "../assets/images/cart.png";
 import {useStores} from "../../../stores/use-stores.ts";
 import {observer} from "mobx-react-lite";
 import CartIcon from './CartIcon.tsx';
@@ -86,6 +85,7 @@ const Hero = observer(() => {
                         Миссия — сохранить и популяризировать Татарскую Культуру
                     </h3>
                 </div>
+                <Link className={s.hero_catalogLink} to={'/shop'}>Каталог</Link>
             </div>
         </section>
     );
