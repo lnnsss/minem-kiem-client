@@ -24,9 +24,14 @@ const Product = observer(() => {
         (a, b) => sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size)
     );
 
-
     const [activeIndex, setActiveIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
+
+    const toggleAccordion = (key: string) => {
+        setActiveAccordion((prev) => (prev === key ? null : key));
+    };
 
     useEffect(() => {
         if (slug) {
@@ -109,7 +114,11 @@ const Product = observer(() => {
                     <div className={s.product_info}>
                         <div className={s.titlePreOrder}>
                             <h2 className={s.product_info_title}>{product.name}</h2>
-                            {productStore.isPreorder && <h5 className={s.preOrder} title="Доставка до 21 дня">Предзаказ: Срок доставки до 21 дня</h5>}
+                            {productStore.isPreorder && productStore.deliveryInfo && (
+                                <h5 className={s.preOrder} title={productStore.deliveryInfo}>
+                                    {productStore.deliveryInfo}
+                                </h5>
+                            )}
                         </div>
 
                         <span className={s.product_info_price}>
@@ -146,6 +155,88 @@ const Product = observer(() => {
                         <p className={s.product_info_description}>
                             {product.group.description}
                         </p>
+
+                        <div className={s.product_info_accordions}>
+
+                            {productStore.materials.trim() && (
+                                <div className={s.product_info_accordion}>
+                                    <div
+                                        className={s.accordion_header}
+                                        onClick={() => toggleAccordion("materials")}
+                                    >
+                                        <h4 className={s.accordion_title}>
+                                            Состав и материалы
+                                        </h4>
+                                        <div className={s.accordion_icon}>
+                                            {activeAccordion === "materials" ? "−" : "+"}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className={`${s.accordion_body_wrapper} ${
+                                            activeAccordion === "materials" ? s.open : ""
+                                        }`}
+                                    >
+                                        <p className={s.accordion_body}>
+                                            {productStore.materials}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {productStore.careInstructions.trim() && (
+                                <div className={s.product_info_accordion}>
+                                    <div
+                                        className={s.accordion_header}
+                                        onClick={() => toggleAccordion("care")}
+                                    >
+                                        <h4 className={s.accordion_title}>
+                                            Уход за изделием
+                                        </h4>
+                                        <div className={s.accordion_icon}>
+                                            {activeAccordion === "care" ? "−" : "+"}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className={`${s.accordion_body_wrapper} ${
+                                            activeAccordion === "care" ? s.open : ""
+                                        }`}
+                                    >
+                                        <p className={s.accordion_body}>
+                                            {productStore.careInstructions}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {productStore.sizeChart.trim() && (
+                                <div className={s.product_info_accordion}>
+                                    <div
+                                        className={s.accordion_header}
+                                        onClick={() => toggleAccordion("size")}
+                                    >
+                                        <h4 className={s.accordion_title}>
+                                            Размерная сетка
+                                        </h4>
+                                        <div className={s.accordion_icon}>
+                                            {activeAccordion === "size" ? "−" : "+"}
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className={`${s.accordion_body_wrapper} ${
+                                            activeAccordion === "size" ? s.open : ""
+                                        }`}
+                                    >
+                                        <p className={s.accordion_body}>
+                                            {productStore.sizeChart}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
                     </div>
                 </div>
             </div>

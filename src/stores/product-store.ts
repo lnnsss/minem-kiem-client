@@ -102,7 +102,10 @@ export class ProductStore {
 
     get currentVariant() {
         if (!this.product || this.selectedVariantId === null) return null;
-        return this.product.variants.find((v) => v.id === this.selectedVariantId) || null;
+        return (
+            this.product.variants.find((v) => v.id === this.selectedVariantId) ||
+            null
+        );
     }
 
     get isInStock() {
@@ -113,6 +116,26 @@ export class ProductStore {
     get isPreorder() {
         return this.product?.is_preorder || false;
     }
+
+    /* --- НОВОЕ --- */
+
+    get deliveryInfo() {
+        return this.product?.group.delivery_info || "";
+    }
+
+    get materials() {
+        return this.product?.group.materials || "";
+    }
+
+    get careInstructions() {
+        return this.product?.group.care_instructions || "";
+    }
+
+    get sizeChart() {
+        return this.product?.group.size_chart || "";
+    }
+
+    /* ---------------- */
 
     get mainImage() {
         return this.product?.media
@@ -135,7 +158,9 @@ export class ProductStore {
 
     isSizeAvailable(size: string) {
         if (!this.product) return false;
-        const variant = this.product.variants.find((v) => v.size === size && v.is_active);
+        const variant = this.product.variants.find(
+            (v) => v.size === size && v.is_active
+        );
         return !!variant && variant.stock > 0;
     }
 }
