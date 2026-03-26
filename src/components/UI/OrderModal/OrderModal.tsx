@@ -166,13 +166,13 @@ export const OrderModal = observer(() => {
                     </button>
 
                     {/*ПЛАТИ ЧАСТЯМИ*/}
-                    <button
-                        className={`${s.buyBtn} ${s.buyBtn_pc}`}
-                        disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
-                        onClick={() => handlePlaceOrder("sber_bnpl")}
-                    >
-                        {cart.loading ? "Отправка..." : "Плати частями"}
-                    </button>
+                    {/*<button*/}
+                    {/*    className={`${s.buyBtn} ${s.buyBtn_pc}`}*/}
+                    {/*    disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}*/}
+                    {/*    onClick={() => handlePlaceOrder("sber_bnpl")}*/}
+                    {/*>*/}
+                    {/*    {cart.loading ? "Отправка..." : "Плати частями"}*/}
+                    {/*</button>*/}
                 </div>
 
                 {cart.error && <p className={s.error}>{cart.error}</p>}
