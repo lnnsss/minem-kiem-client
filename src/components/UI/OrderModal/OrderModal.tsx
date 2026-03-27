@@ -5,6 +5,7 @@ import { useStores } from "../../../stores/use-stores";
 import CloseIcon from "./components/CloseIcon";
 import ModalProduct from "./components/ModalProduct";
 import { ModalInput } from "./components/ModalInput";
+import { Cdek } from "./components/Cdek";
 
 export const OrderModal = observer(() => {
     const { modal, cart } = useStores();
@@ -13,19 +14,21 @@ export const OrderModal = observer(() => {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [deliveryAddress, setDeliveryAddress] = useState("");
+    const [deliveryCode, setDeliveryCode] = useState<string>("");
+    const [deliveryPrice, setDeliveryPrice] = useState(0);
     const [comment, setComment] = useState("");
     const [isAgreed, setIsAgreed] = useState(false);
-
-    const DELIVERY_COST = 400;
+    const [deliveryTariff, setDeliveryTariff] = useState<"self_pickup" | "time_interval" | null>(null);
 
     const isFormFilled =
         name.trim() &&
         email.trim() &&
         phone.trim() &&
-        deliveryAddress.trim();
+        deliveryAddress.trim() &&
+        deliveryCode.trim();
 
     const PRODUCTS_SUM = cart.productsTotalPrice;
-    const TOTAL_SUM = PRODUCTS_SUM + (deliveryAddress.trim() ? DELIVERY_COST : 0);
+    const TOTAL_SUM = PRODUCTS_SUM + (deliveryAddress.trim() ? deliveryPrice : 0);
 
     useEffect(() => {
         if (modal.editingModalActive) {
@@ -36,10 +39,55 @@ export const OrderModal = observer(() => {
         };
     }, [modal.editingModalActive]);
 
+    useEffect(() => {
+        console.log("[OrderModal] deliveryPrice state updated:", deliveryPrice);
+    }, [deliveryPrice]);
+
     if (!modal.editingModalActive) return null;
 
+    const calculateDelivery = async (address: string, tariff: string, cdek_pvz_code?: string) => {
+        try {
+            const payload: any = {
+                items: cart.items.map(item => ({
+                    product_variant: item.variantId,
+                    quantity: item.quantity
+                })),
+                address,
+                tariff,
+            };
+            if (tariff === "self_pickup" && cdek_pvz_code) {
+                payload.cdek_pvz_code = cdek_pvz_code;
+            }
+
+            const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+            const deliveryUrl = `${apiBase}/delivery/calculate/`;
+            const res = await fetch(deliveryUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data?.detail || data?.error || `HTTP ${res.status}`);
+            }
+
+            const nextDeliveryPrice = Number(data?.cost);
+            if (!Number.isFinite(nextDeliveryPrice)) {
+                throw new Error(`Некорректная стоимость доставки: ${data?.cost}`);
+            }
+
+            setDeliveryPrice(nextDeliveryPrice);
+            console.log("[OrderModal] Delivery cost API response:", data);
+            console.log("[OrderModal] Delivery cost saved to state:", nextDeliveryPrice);
+        } catch (err) {
+            console.error("Ошибка расчета доставки:", err);
+            setDeliveryPrice(0);
+        }
+    };
+
     const handlePlaceOrder = async (
-        paymentMethod: "sbp" | "sber_bnpl" = "sbp"
+        paymentMethod: "sbp" | "sber_bnpl" | "bank_card" = "sbp",
     ) => {
         if (!isFormFilled || !isAgreed || cart.items.length === 0) return;
 
@@ -51,7 +99,11 @@ export const OrderModal = observer(() => {
             comment,
         };
 
-        await cart.placeOrder(customerInfo, paymentMethod);
+        console.log("Order payload:", customerInfo);
+        console.log("paymentMethod:", paymentMethod);
+        console.log("deliveryCode:", deliveryCode);
+
+        await cart.placeOrder(customerInfo, paymentMethod, deliveryCode);
 
         if (!cart.error) {
             modal.setEditingModalActive(false);
@@ -61,6 +113,7 @@ export const OrderModal = observer(() => {
             setDeliveryAddress("");
             setComment("");
             setIsAgreed(false);
+            setDeliveryPrice(0);
         } else {
             alert(`Ошибка: ${cart.error}`);
         }
@@ -79,7 +132,6 @@ export const OrderModal = observer(() => {
                 {/* ТОВАРЫ */}
                 <div className={s.modal_products}>
                     {cart.items.length === 0 && <p>Корзина пуста</p>}
-
                     {cart.items.map((item) => (
                         <ModalProduct
                             key={item.variantId}
@@ -108,24 +160,25 @@ export const OrderModal = observer(() => {
                     onChange={setPhone}
                     placeholder="+7 (___) ___-__-__"
                 />
-                <ModalInput
-                    label="Адрес доставки"
-                    value={deliveryAddress}
-                    onChange={setDeliveryAddress}
-                    placeholder="Казань, Кремлёвская, 8"
-                />
-                <ModalInput
-                    label="Комментарий"
-                    textarea
-                    value={comment}
-                    onChange={setComment}
-                />
+                <ModalInput label="Комментарий" textarea value={comment} onChange={setComment} />
+
+                <div className={s.cdek}>
+                    <Cdek
+                        onSelect={(address, code, price) => {
+                            setDeliveryAddress(address);
+                            setDeliveryCode(code);
+                            const tariffType = code ? "self_pickup" : "time_interval";
+                            setDeliveryTariff(tariffType);
+                            calculateDelivery(address, tariffType, code);
+                        }}
+                    />
+                </div>
 
                 {/* ИТОГО */}
                 <p className={s.modal_orderInfo}>
                     Сумма товаров: {PRODUCTS_SUM} руб
                     <br />
-                    Доставка: {deliveryAddress.trim() ? `${DELIVERY_COST} руб` : "не выбрана"}
+                    Доставка: {deliveryAddress.trim() ? `${deliveryPrice} руб` : "не выбрана"}
                     <br />
                     {deliveryAddress || "Пункт выдачи не выбран"}
                 </p>
@@ -141,22 +194,14 @@ export const OrderModal = observer(() => {
                         />
                         <span>
                             Я согласен с{" "}
-                            <a href="/oferta" target="_blank" className={s.docLink}>
-                                Договор-оферта
-                            </a>
-                            ,{" "}
-                            <a href="/agreement" target="_blank" className={s.docLink}>
-                                Согласие на обработку персональных данных
-                            </a>
-                            ,{" "}
-                            <a href="/politics" target="_blank" className={s.docLink}>
-                                Политика конфиденциальности
-                            </a>
+                            <a href="/oferta" target="_blank" className={s.docLink}>Договор-оферта</a>,{" "}
+                            <a href="/agreement" target="_blank" className={s.docLink}>Согласие на обработку персональных данных</a>,{" "}
+                            <a href="/politics" target="_blank" className={s.docLink}>Политика конфиденциальности</a>
                         </span>
                     </label>
                 </div>
+
                 <div className={s.buyBtns}>
-                    {/*ОБЫЧНАЯ ОПЛАТА*/}
                     <button
                         className={s.buyBtn}
                         disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}
@@ -164,15 +209,6 @@ export const OrderModal = observer(() => {
                     >
                         {cart.loading ? "Отправка..." : "К оплате"}
                     </button>
-
-                    {/*ПЛАТИ ЧАСТЯМИ*/}
-                    {/*<button*/}
-                    {/*    className={`${s.buyBtn} ${s.buyBtn_pc}`}*/}
-                    {/*    disabled={!isFormFilled || cart.items.length === 0 || !isAgreed || cart.loading}*/}
-                    {/*    onClick={() => handlePlaceOrder("sber_bnpl")}*/}
-                    {/*>*/}
-                    {/*    {cart.loading ? "Отправка..." : "Плати частями"}*/}
-                    {/*</button>*/}
                 </div>
 
                 {cart.error && <p className={s.error}>{cart.error}</p>}

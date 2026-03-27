@@ -17,6 +17,7 @@ export interface CartItem {
 }
 
 const STORAGE_KEY = "cart";
+type PaymentMethod = "sbp" | "sber_bnpl" | "bank_card";
 
 export class CartStore {
     items: CartItem[] = [];
@@ -205,12 +206,24 @@ export class CartStore {
             shipping_address: string;
             comment?: string;
         },
-        payment_method: "sbp" | "sber_bnpl" = "sbp"
+        payment_method: PaymentMethod = "sbp",
+        cdek_pvz_code?: string
     ) {
         if (this.items.length === 0) {
             this.error = "Корзина пуста";
             return;
         }
+        if (!cdek_pvz_code?.trim()) {
+            this.error = "Не выбран пункт выдачи СДЭК";
+            return;
+        }
+
+        const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+        const orderEndpoint = `${apiBase}/orders/`;
+        const isLocalApi =
+            apiBase.includes("localhost") || apiBase.includes("127.0.0.1");
+        const effectivePaymentMethod =
+            isLocalApi && payment_method === "sbp" ? "bank_card" : payment_method;
 
         const payload = {
             items: this.items.map((i) => ({
@@ -218,14 +231,17 @@ export class CartStore {
                 quantity: i.quantity.toString(),
             })),
             customer_info: customerInfo,
-            payment_method,
+            payment_method: effectivePaymentMethod,
+            cdek_pvz_code: cdek_pvz_code.trim(),
         };
 
         this.loading = true;
         this.error = null;
 
         try {
-            const response = await api.post("/orders/", payload);
+            console.log("[CartStore] placeOrder payload:", payload);
+            const response = await api.post(orderEndpoint, payload);
+            console.log("[CartStore] placeOrder response:", response.data);
             const paymentUrl = response.data.payment_url;
 
             runInAction(() => {
@@ -233,14 +249,18 @@ export class CartStore {
                 this.loading = false;
             });
 
-            if (paymentUrl) {
-                window.location.href = paymentUrl;
-            }
+            // if (paymentUrl) {
+            //     window.locatizon.href = paymentUrl;
+            // }
 
             return response.data;
         } catch (err: any) {
             runInAction(() => {
                 this.error =
+                    err?.response?.data?.detail ||
+                    err?.response?.data?.customer_info?.[0] ||
+                    err?.response?.data?.items?.[0] ||
+                    err?.response?.data?.cdek_pvz_code?.[0] ||
                     err?.response?.data?.message ||
                     "Ошибка при оформлении заказа";
                 this.loading = false;
