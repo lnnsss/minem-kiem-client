@@ -12,6 +12,7 @@ type Props = {
 
 export const Cdek = ({ onSelect }: Props) => {
     const [widgetReady, setWidgetReady] = useState(false);
+    const [widgetError, setWidgetError] = useState<string | null>(null);
 
     const widgetInitializedRef = useRef(false);
     const isMountedRef = useRef(true);
@@ -44,76 +45,87 @@ export const Cdek = ({ onSelect }: Props) => {
         let cancelled = false;
 
         const servicePath =
-            import.meta.env.VITE_CDEK_SERVICE_PATH?.trim() || `/cdek-service`;
+            import.meta.env.VITE_CDEK_SERVICE_PATH?.trim() ||
+            "/api/v1/delivery/cdek-widget/service/";
 
         (async () => {
-            await ensureCdekWidgetReady();
-            if (cancelled) return;
-            if (!window.CDEKWidget) return;
+            try {
+                await ensureCdekWidgetReady();
+                if (cancelled) return;
+                if (!window.CDEKWidget) {
+                    throw new Error("window.CDEKWidget is not available");
+                }
 
-            new window.CDEKWidget({
-                from: {
-                    country_code: "RU",
-                    city: "Казань",
-                    postal_code: 420111,
-                    code: 1100,
-                    address: "ул. Сибирский Тракт, 23",
-                },
-                canChoose: true,
-                hideFilters: {
-                    have_cashless: false,
-                    have_cash: false,
-                    is_dressing_room: false,
-                    type: false,
-                },
-                hideDeliveryOptions: {
-                    office: false,
-                    door: true,
-                },
-                defaultLocation: userLocation,
-                goods: [
-                    {
-                        width: 20,
-                        height: 10,
-                        length: 20,
-                        weight: 0.5,
+                new window.CDEKWidget({
+                    from: {
+                        country_code: "RU",
+                        city: "Казань",
+                        postal_code: 420111,
+                        code: 1100,
+                        address: "ул. Сибирский Тракт, 23",
                     },
-                ],
-                root: "cdek-map",
-                apiKey: import.meta.env.VITE_YANDEX_MAPS_API_KEY,
-                servicePath,
-                lang: "rus",
-                currency: "RUB",
-                tariffs: {
-                    office: [234, 136],
-                },
-                onReady() {
-                    if (!isMountedRef.current) return;
-                    setWidgetReady(true);
-                },
-                onChoose(
-                    mode: CdekSelectedDeliveryMode,
-                    tariff: CdekSelectedTariff,
-                    office: CdekSelectedAddress,
-                ) {
-                    const address = `${office.city}, ${office.address}`.trim();
-                    const cdek_pvz_code = office.code;
-                    const tariffType = mode === "office" ? "self_pickup" : "time_interval";
-                    const price = tariff.delivery_sum;
+                    canChoose: true,
+                    hideFilters: {
+                        have_cashless: false,
+                        have_cash: false,
+                        is_dressing_room: false,
+                        type: false,
+                    },
+                    hideDeliveryOptions: {
+                        office: false,
+                        door: true,
+                    },
+                    defaultLocation: userLocation,
+                    goods: [
+                        {
+                            width: 20,
+                            height: 10,
+                            length: 20,
+                            weight: 0.5,
+                        },
+                    ],
+                    root: "cdek-map",
+                    apiKey: import.meta.env.VITE_YANDEX_MAPS_API_KEY,
+                    servicePath,
+                    lang: "rus",
+                    currency: "RUB",
+                    tariffs: {
+                        office: [234, 136],
+                    },
+                    onReady() {
+                        if (!isMountedRef.current) return;
+                        setWidgetError(null);
+                        setWidgetReady(true);
+                    },
+                    onChoose(
+                        mode: CdekSelectedDeliveryMode,
+                        tariff: CdekSelectedTariff,
+                        office: CdekSelectedAddress,
+                    ) {
+                        const address = `${office.city}, ${office.address}`.trim();
+                        const cdek_pvz_code = office.code;
+                        const tariffType =
+                            mode === "office" ? "self_pickup" : "time_interval";
+                        const price = tariff.delivery_sum;
 
-                    console.log({
-                        address,          // строка с городом
-                        cdek_pvz_code,    // код ПВЗ
-                        tariff: tariffType,
-                        price,            // стоимость доставки
-                    });
+                        console.log({
+                            address,
+                            cdek_pvz_code,
+                            tariff: tariffType,
+                            price,
+                        });
 
-                    // если нужно — вызываем onSelect
-                    onSelect(address, cdek_pvz_code, price);
-                },
-            });
+                        onSelect(address, cdek_pvz_code, price);
+                    },
+                });
 
-            widgetInitializedRef.current = true;
+                widgetInitializedRef.current = true;
+            } catch (error) {
+                console.error("CDEK widget init failed:", error);
+                if (isMountedRef.current) {
+                    setWidgetError("Не удалось загрузить карту СДЭК");
+                }
+            }
         })();
 
         return () => {
@@ -125,7 +137,8 @@ export const Cdek = ({ onSelect }: Props) => {
         <div className="h-full relative flex flex-col">
             <div id="cdek-map" style={{ width: "100%", height: "600px" }} />
 
-            {!widgetReady && <WidgetLoadingState />}
+            {!widgetReady && !widgetError && <WidgetLoadingState />}
+            {widgetError && <WidgetErrorState message={widgetError} />}
         </div>
     );
 };
@@ -146,4 +159,8 @@ const getUserLocation = (): Promise<GeolocationPosition> => {
             reject(new Error("Geolocation is not supported"));
         }
     });
+};
+
+const WidgetErrorState = ({ message }: { message: string }) => {
+    return <div className="h-full flex items-center justify-center">{message}</div>;
 };
