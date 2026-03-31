@@ -249,9 +249,9 @@ export class CartStore {
                 this.loading = false;
             });
 
-            // if (paymentUrl) {
-            //     window.locatizon.href = paymentUrl;
-            // }
+            if (paymentUrl) {
+                window.location.href = paymentUrl;
+            }
 
             return response.data;
         } catch (err: any) {
