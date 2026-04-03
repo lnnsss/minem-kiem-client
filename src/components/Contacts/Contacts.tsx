@@ -65,7 +65,7 @@ export default function Contacts() {
                                 type="email"
                                 name="email"
                                 value={form.email}
-                                placeholder="Ваш Email"
+                                placeholder="Ваш телеграм или номер телефона"
                                 onChange={handleChange}
                             />
                             <FormInput
