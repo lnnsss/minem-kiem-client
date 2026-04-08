@@ -219,7 +219,7 @@ export class CartStore {
         }
 
         const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
-        const orderEndpoint = `${apiBase}/orders/`;
+        const orderEndpoint = "/orders/";
         const isLocalApi =
             apiBase.includes("localhost") || apiBase.includes("127.0.0.1");
         const effectivePaymentMethod =

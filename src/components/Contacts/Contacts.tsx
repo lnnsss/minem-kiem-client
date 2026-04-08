@@ -62,10 +62,10 @@ export default function Contacts() {
 
                         <form className={s.contacts_form} onSubmit={handleSubmit}>
                             <FormInput
-                                type="email"
+                                type="text"
                                 name="email"
                                 value={form.email}
-                                placeholder="Ваш телеграм или номер телефона"
+                                placeholder="Ваш телеграм, номер телефона или email"
                                 onChange={handleChange}
                             />
                             <FormInput
