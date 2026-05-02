@@ -1,6 +1,6 @@
 import pin from '../assets/images/pin.png';
-import team1 from '../assets/images/team1.jpg';
-import team2 from '../assets/images/team2.jpg';
+import team1 from '../assets/images/team1.webp';
+import team2 from '../assets/images/team2.webp';
 import s from '../Main.module.css';
 
 export default function Team() {

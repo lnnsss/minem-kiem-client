@@ -1,6 +1,6 @@
-import reviews1 from '../assets/images/reviews1.jpg';
-import reviews2 from '../assets/images/reviews2.jpg';
-import reviews3 from '../assets/images/reviews3.jpg';
+import reviews1 from '../assets/images/reviews1.webp';
+import reviews2 from '../assets/images/reviews2.webp';
+import reviews3 from '../assets/images/reviews3.webp';
 import s from '../Main.module.css';
 
 function Star() {

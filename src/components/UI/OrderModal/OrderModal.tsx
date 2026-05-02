@@ -174,6 +174,8 @@ export const OrderModal = observer(() => {
                     />
                 </div>
 
+                <p className={s.vpnWarning}>Виджет может не работать с включённым VPN</p>
+
                 {/* ИТОГО */}
                 <p className={s.modal_orderInfo}>
                     Сумма товаров: {PRODUCTS_SUM} руб

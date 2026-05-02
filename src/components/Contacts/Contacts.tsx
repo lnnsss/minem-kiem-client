@@ -20,6 +20,7 @@ export default function Contacts() {
         name: "",
         question: "",
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,6 +31,7 @@ export default function Contacts() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await Api.sendContact({
                 name: form.name,
@@ -42,6 +44,8 @@ export default function Contacts() {
         } catch (error) {
             console.error("Ошибка отправки:", error);
             alert("Произошла ошибка при отправке сообщения.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -81,7 +85,9 @@ export default function Contacts() {
                                 textarea
                                 onChange={handleChange}
                             />
-                            <button className={s.contacts_btn}>Отправить</button>
+                            <button className={s.contacts_btn} disabled={loading}>
+                                {loading ? "Отправка..." : "Отправить"}
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 import s from "../Main.module.css"
-import photo1 from '../assets/images/photo1.jpg';
-import photo2 from '../assets/images/photo2.jpg';
-import photo3 from '../assets/images/photo3.jpg';
-import photo4 from '../assets/images/photo4.jpg';
+import photo1 from '../assets/images/photo1.webp';
+import photo2 from '../assets/images/photo2.webp';
+import photo3 from '../assets/images/photo3.webp';
+import photo4 from '../assets/images/photo4.webp';
 
 export default function About() {
     return (
