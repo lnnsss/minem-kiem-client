@@ -40,10 +40,16 @@ const Products = observer(() => {
 
                 <div className={s.products_cover}>
                     <h2>Каталог</h2>
+                    <a href="#productsHeader" className={s.downBtn}>
+                        <svg width="40" height="40" viewBox="0 0 127 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3.5" y="3.5" width="120" height="120" rx="60" stroke="white" stroke-width="7"/>
+                            <path d="M67 33.5C67 31.567 65.433 30 63.5 30C61.567 30 60 31.567 60 33.5L63.5 33.5L67 33.5ZM61.0251 95.9749C62.392 97.3417 64.608 97.3417 65.9749 95.9749L88.2487 73.701C89.6156 72.3342 89.6156 70.1181 88.2487 68.7513C86.8819 67.3844 84.6658 67.3844 83.299 68.7513L63.5 88.5503L43.701 68.7513C42.3342 67.3844 40.1181 67.3844 38.7513 68.7513C37.3844 70.1181 37.3844 72.3342 38.7513 73.701L61.0251 95.9749ZM63.5 33.5L60 33.5L60 93.5L63.5 93.5L67 93.5L67 33.5L63.5 33.5Z" fill="white"/>
+                        </svg>
+                    </a>
                 </div>
 
                 <div className={`__container ${s.products_container}`}>
-                    <div className={s.products_header}>
+                    <div className={s.products_header} id="productsHeader">
                         <ul className={s.products_filters}>
                             <ProductsFilter
                                 title="Все"
