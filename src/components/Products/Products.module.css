@@ -8,10 +8,13 @@
 
 .leftRnmnt,
 .rightRnmnt {
-    position: absolute;
+    position: fixed;
     top: 0;
-    width: 180px;
-    height: auto;
+    width: 90px;
+    height: 100vh;
+    height: 100svh;
+    object-fit: cover;
+    object-position: center top;
     pointer-events: none;
 }
 
